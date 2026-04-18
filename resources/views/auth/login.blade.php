@@ -65,6 +65,7 @@
                     <div class="relative" x-data="{ show: false }">
                         <span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#727785] text-xl">lock</span>
                         <input
+                            type="password"
                             :type="show ? 'text' : 'password'"
                             id="password"
                             name="password"

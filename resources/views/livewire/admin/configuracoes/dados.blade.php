@@ -57,10 +57,10 @@
                         <p class="text-xs text-[#727785] mt-0.5">Todos os resultados de avaliações, médias e áreas. Compatível com Excel e Google Sheets.</p>
                     </div>
                 </div>
-                <a href="{{ route('admin.relatorios.exportar.csv') }}"
+                <a href="{{ route('admin.relatorios') }}"
                     class="shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border border-[#006947]/30 text-[#006947] hover:bg-[#6ffbbe]/20 transition-colors">
-                    <span class="material-symbols-outlined text-base">download</span>
-                    CSV
+                    <span class="material-symbols-outlined text-base">open_in_new</span>
+                    Ver Relatórios
                 </a>
             </div>
 
@@ -74,10 +74,10 @@
                         <p class="text-xs text-[#727785] mt-0.5">Versão formatada para impressão e arquivamento oficial.</p>
                     </div>
                 </div>
-                <a href="{{ route('admin.relatorios.exportar.pdf') }}"
+                <a href="{{ route('admin.relatorios') }}"
                     class="shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border border-[#ba1a1a]/30 text-[#ba1a1a] hover:bg-[#ffdad6] transition-colors">
-                    <span class="material-symbols-outlined text-base">download</span>
-                    PDF
+                    <span class="material-symbols-outlined text-base">open_in_new</span>
+                    Ver Relatórios
                 </a>
             </div>
 
