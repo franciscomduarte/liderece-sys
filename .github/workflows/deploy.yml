@@ -1,58 +1,53 @@
-name: Deploy Produção
+script: |
+  set -e
 
-on:
-  push:
-    branches: [ main ]
+  BASE_DIR=/var/www/liderece-sys
+  RELEASES_DIR=$BASE_DIR/releases
+  SHARED_DIR=$BASE_DIR/shared
+  NEW_RELEASE=$RELEASES_DIR/$(date +%Y%m%d%H%M%S)
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  echo "📦 Criando nova release..."
+  mkdir -p $NEW_RELEASE
 
-    steps:
-      - name: Executar deploy via SSH
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: SEU_IP
-          username: root
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            set -e
+  echo "⬇️ Clonando repositório..."
+  git clone git@github.com:franciscomduarte/liderece-sys.git $NEW_RELEASE
 
-            BASE_DIR=/var/www/seu-projeto
-            RELEASES_DIR=$BASE_DIR/releases
-            NEW_RELEASE=$RELEASES_DIR/$(date +%Y%m%d%H%M%S)
+  cd $NEW_RELEASE
 
-            echo "📦 Criando nova release..."
-            mkdir -p $NEW_RELEASE
+  echo "📦 Instalando dependências PHP..."
+  composer install --no-dev --prefer-dist --optimize-autoloader
 
-            echo "⬇️ Clonando projeto..."
-            git clone git@github.com:SEU_USUARIO/SEU_REPO.git $NEW_RELEASE
+  echo "📦 Instalando dependências Node..."
+  npm ci || npm install
+  npm run build
 
-            cd $NEW_RELEASE
+  echo "🔗 Linkando arquivos compartilhados..."
+  ln -s $SHARED_DIR/.env .env
 
-            echo "📦 Instalando dependências..."
-            composer install --no-dev --optimize-autoloader
+  rm -rf storage
+  ln -s $SHARED_DIR/storage storage
 
-            echo "🔗 Linkando arquivos compartilhados..."
-            ln -s $BASE_DIR/shared/.env .env
-            rm -rf storage
-            ln -s $BASE_DIR/shared/storage storage
+  mkdir -p bootstrap/cache
+  chmod -R 775 bootstrap/cache
 
-            echo "🔑 Gerando chave Laravel..."
-            php artisan key:generate --force
+  echo "🔄 Atualizando versão atual..."
+  ln -sfn $NEW_RELEASE $BASE_DIR/current
+  cd $BASE_DIR/current
 
-            echo "🗄️ Rodando migrations..."
-            php artisan migrate --force
+  echo "🗄️ Rodando migrations..."
+  php artisan migrate --force
 
-            echo "⚡ Cache otimizado..."
-            php artisan config:cache
-            php artisan route:cache
-            php artisan view:cache
+  echo "⚡ Limpando e otimizando Laravel..."
+  php artisan config:clear
+  php artisan cache:clear
+  php artisan config:cache
+  php artisan route:cache
+  php artisan view:cache
 
-            echo "🔄 Atualizando release atual..."
-            ln -sfn $NEW_RELEASE $BASE_DIR/current
+  echo "🔁 Reiniciando filas..."
+  php artisan queue:restart || true
 
-            echo "🧹 Limpando releases antigas..."
-            ls -dt $RELEASES_DIR/* | tail -n +6 | xargs rm -rf
+  echo "🧹 Limpando releases antigas..."
+  ls -dt $RELEASES_DIR/* | tail -n +6 | xargs rm -rf
 
-            echo "✅ Deploy finalizado!"
+  echo "✅ Deploy finalizado!!!"
