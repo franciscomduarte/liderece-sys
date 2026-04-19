@@ -1,28 +1,29 @@
 @php
-$paddings = [0 => 'px-6', 1 => 'pl-12 pr-6', 2 => 'pl-20 pr-6'];
-$pad = $paddings[$indent] ?? 'pl-20 pr-6';
+// compatibilidade com chamadas que ainda passem $indent
+$depth ??= $indent ?? 0;
+$paddingLeft = 24 + ($depth * 28); // px — 24px base + 28px por nível
 @endphp
 <tr class="float-in hover:bg-[#f6fafe] transition-colors duration-200 group">
-    <td class="{{ $pad }} py-4">
+    <td style="padding-left: {{ $paddingLeft }}px; padding-right: 24px;" class="py-4">
         <div class="flex items-center gap-3">
-            @if($indent > 0)
+            @if($depth > 0)
             <span class="text-[#c2c6d6] material-symbols-outlined text-base shrink-0">subdirectory_arrow_right</span>
             @endif
-            <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0
-                {{ $indent === 0 ? 'bg-[#d8e2ff]' : 'bg-[#f0f4f8]' }}">
-                <span class="material-symbols-outlined text-lg {{ $indent === 0 ? 'text-[#004395]' : 'text-[#727785]' }}">
-                    {{ $indent === 0 ? 'domain' : 'subdirectory_arrow_right' }}
+            <div class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0
+                {{ $depth === 0 ? 'bg-[#d8e2ff]' : ($depth === 1 ? 'bg-[#f0f4f8]' : 'bg-white border border-[#eaeef2]') }}">
+                <span class="material-symbols-outlined text-base {{ $depth === 0 ? 'text-[#004395]' : 'text-[#727785]' }}">
+                    {{ $depth === 0 ? 'domain' : 'account_tree' }}
                 </span>
             </div>
             <div>
-                <p class="font-['Manrope'] font-{{ $indent === 0 ? 'bold' : 'semibold' }} text-[#171c1f] text-sm">{{ $area->nome }}</p>
+                <p class="font-['Manrope'] font-{{ $depth === 0 ? 'bold' : ($depth === 1 ? 'semibold' : 'medium') }} text-[#171c1f] text-sm">
+                    {{ $area->nome }}
+                </p>
                 @if($area->descricao)
                 <p class="text-xs text-[#727785] mt-0.5 line-clamp-1">{{ $area->descricao }}</p>
                 @endif
-                @if($area->children_count ?? $area->children->count())
-                <p class="text-xs text-[#0058be] mt-0.5">
-                    {{ $area->children_count ?? $area->children->count() }} subárea(s)
-                </p>
+                @if($area->servidores_count > 0)
+                <p class="text-xs text-[#727785] mt-0.5">{{ $area->servidores_count }} servidor(es)</p>
                 @endif
             </div>
         </div>

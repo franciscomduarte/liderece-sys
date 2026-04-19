@@ -60,7 +60,7 @@
     @else
 
     {{-- Árvore hierárquica --}}
-    @if($arvore->isEmpty())
+    @if(empty($arvore))
     <div class="bg-white rounded-2xl p-16 shadow-[0_12px_40px_rgba(23,28,31,0.06)] text-center">
         <span class="material-symbols-outlined text-4xl text-[#c2c6d6] block mb-3">domain_disabled</span>
         <p class="font-['Manrope'] font-bold text-[#171c1f] mb-1">Nenhuma área cadastrada</p>
@@ -79,14 +79,8 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-[#eaeef2]">
-                @foreach($arvore as $raiz)
-                    @include('livewire.admin.areas._row', ['area' => $raiz, 'indent' => 0])
-                    @foreach($raiz->children as $filho)
-                        @include('livewire.admin.areas._row', ['area' => $filho, 'indent' => 1])
-                        @foreach($filho->children as $neto)
-                            @include('livewire.admin.areas._row', ['area' => $neto, 'indent' => 2])
-                        @endforeach
-                    @endforeach
+                @foreach($arvore as $node)
+                    @include('livewire.admin.areas._row', ['area' => $node['area'], 'depth' => $node['depth']])
                 @endforeach
             </tbody>
         </table>

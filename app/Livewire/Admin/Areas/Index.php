@@ -111,8 +111,7 @@ class Index extends Component
     public function render()
     {
         if ($this->search) {
-            // busca plana quando filtro ativo
-            $areas = Area::query()
+            $areas  = Area::query()
                 ->where('nome', 'ilike', "%{$this->search}%")
                 ->withCount('servidores')
                 ->with('parent')
@@ -121,15 +120,12 @@ class Index extends Component
             $arvore = null;
         } else {
             $areas  = null;
-            // árvore: raízes com filhos aninhados
-            $arvore = Area::whereNull('parent_id')
-                ->with(['children' => fn ($q) => $q->withCount('servidores')->with('children.servidores')])
-                ->withCount('servidores')
-                ->orderBy('nome')
-                ->get();
+            // carrega tudo em uma query e achata em ordem hierárquica com profundidade
+            $all    = Area::with('parent')->withCount('servidores')->orderBy('nome')->get();
+            $roots  = $all->whereNull('parent_id');
+            $arvore = $this->flattenTree($roots, $all, 0);
         }
 
-        // Para o select "Área pai" no modal — carrega apenas quando modal está aberto
         $areasParaSelect = $this->showModal
             ? Area::with('parent')->orderBy('nome')
                 ->when($this->editingId, fn ($q) => $q->where('id', '!=', $this->editingId))
@@ -139,5 +135,18 @@ class Index extends Component
         return view('livewire.admin.areas.index', compact('areas', 'arvore', 'areasParaSelect'))
             ->layout('layouts.app')
             ->title('Áreas');
+    }
+
+    private function flattenTree($areas, $all, int $depth): array
+    {
+        $result = [];
+        foreach ($areas as $area) {
+            $result[] = ['area' => $area, 'depth' => $depth];
+            $children = $all->where('parent_id', $area->id);
+            if ($children->isNotEmpty()) {
+                array_push($result, ...$this->flattenTree($children, $all, $depth + 1));
+            }
+        }
+        return $result;
     }
 }
