@@ -67,7 +67,37 @@
         <p class="text-sm text-[#727785]">Crie a primeira área para organizar os servidores.</p>
     </div>
     @else
-    <div class="bg-white rounded-2xl shadow-[0_12px_40px_rgba(23,28,31,0.06)] overflow-hidden ring-1 ring-black/[0.04]">
+    @php
+        $allParentIds = collect($arvore)->filter(fn($n) => $n['has_children'])->map(fn($n) => $n['area']->id)->values()->toArray();
+    @endphp
+    <div
+        x-data="{
+            expanded: [],
+            toggle(id) {
+                const idx = this.expanded.indexOf(id);
+                idx > -1 ? this.expanded.splice(idx, 1) : this.expanded.push(id);
+            },
+            isOpen(id) { return this.expanded.includes(id); },
+            isVisible(ancestors) { return ancestors.every(id => this.expanded.includes(id)); },
+            expandAll() { this.expanded = {{ Js::from($allParentIds) }}; },
+            collapseAll() { this.expanded = []; }
+        }"
+        class="bg-white rounded-2xl shadow-[0_12px_40px_rgba(23,28,31,0.06)] overflow-hidden ring-1 ring-black/[0.04]"
+    >
+        {{-- Barra superior com expand/collapse --}}
+        <div class="flex items-center justify-end gap-2 px-6 py-3 border-b border-[#eaeef2] bg-[#f6fafe]">
+            <button @click="expandAll()"
+                class="flex items-center gap-1 text-xs font-semibold text-[#0058be] hover:underline">
+                <span class="material-symbols-outlined text-sm">unfold_more</span>
+                Expandir tudo
+            </button>
+            <span class="text-[#c2c6d6]">|</span>
+            <button @click="collapseAll()"
+                class="flex items-center gap-1 text-xs font-semibold text-[#727785] hover:underline">
+                <span class="material-symbols-outlined text-sm">unfold_less</span>
+                Recolher tudo
+            </button>
+        </div>
         <table class="w-full">
             <thead>
                 <tr class="bg-[#f0f4f8] border-b border-[#eaeef2]">
@@ -80,7 +110,12 @@
             </thead>
             <tbody class="divide-y divide-[#eaeef2]">
                 @foreach($arvore as $node)
-                    @include('livewire.admin.areas._row', ['area' => $node['area'], 'depth' => $node['depth']])
+                    @include('livewire.admin.areas._row', [
+                        'area'         => $node['area'],
+                        'depth'        => $node['depth'],
+                        'ancestorIds'  => $node['ancestor_ids'],
+                        'hasChildren'  => $node['has_children'],
+                    ])
                 @endforeach
             </tbody>
         </table>
