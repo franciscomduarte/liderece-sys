@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(robocopy \"C:\\\\projetos\\\\sgc-temp\" \"C:\\\\projetos\\\\liderece-sys\" /E /XD \".git\" /XF \"CLAUDE.md\")",
+      "Bash(xcopy \"C:\\\\projetos\\\\sgc-temp\\\\*\" \"C:\\\\projetos\\\\liderece-sys\\\\\" /E /Y /EXCLUDE:C:\\\\projetos\\\\sgc-temp\\\\exclude.txt 2>&1 | tail -5 || echo \"trying alternative\")",
+      "Bash(./vendor/bin/pest --init)",
+      "Bash(grep -l 'namespace App\\\\\\\\\\\\\\\\Livewire' /c/projetos/liderece-sys/app/Livewire/**/**/*.php /c/projetos/liderece-sys/app/Livewire/**/*.php)",
+      "Bash(cat)",
+      "Bash(python3 /tmp/fix_livewire.py)",
+      "Bash(php /c/projetos/liderece-sys/fix_namespaces.php)",
+      "Bash(./vendor/bin/pest tests/Feature/Auth/LoginTest.php --no-coverage)",
+      "Bash(psql -U postgres -c \"SELECT version\\(\\);\")",
+      "Bash(echo \"PID: $!\")",
+      "Bash(npm config *)",
+      "Bash(npm cache *)",
+      "Bash(sed -i 's/use Illuminate\\\\\\\\Database\\\\\\\\Eloquent\\\\\\\\Concerns\\\\\\\\HasUuids;/use Illuminate\\\\\\\\Database\\\\\\\\Eloquent\\\\\\\\Concerns\\\\\\\\HasUuids;\\\\nuse Illuminate\\\\\\\\Database\\\\\\\\Eloquent\\\\\\\\Factories\\\\\\\\HasFactory;/' c:/projetos/liderece-sys/app/Models/ItemAvaliacao.php)",
+      "Bash(sed -i 's/use HasUuids;/use HasUuids, HasFactory;/' c:/projetos/liderece-sys/app/Models/ItemAvaliacao.php)",
+      "Bash(xargs ls *)"
+    ]
+  }
+}
