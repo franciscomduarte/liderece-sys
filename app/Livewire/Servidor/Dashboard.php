@@ -6,6 +6,7 @@ namespace App\Livewire\Servidor;
 
 use App\Models\Avaliacao;
 use App\Models\Ciclo;
+use App\Models\Competencia;
 use App\Models\Contestacao;
 use Livewire\Component;
 
@@ -16,12 +17,21 @@ class Dashboard extends Component
         $servidor = auth()->user()->servidor;
         $ciclo    = Ciclo::cicloAtivo();
 
-        $autoavaliacoesPendentes = $ciclo
+        // IDs de competências já concluídas (enviadas) no ciclo ativo
+        $enviadas = $ciclo
             ? Avaliacao::where('ciclo_id', $ciclo->id)
                 ->where('servidor_id', $servidor->id)
                 ->where('tipo', 'autoavaliacao')
-                ->where('status', 'rascunho')
-                ->with('competencia')
+                ->where('status', 'enviada')
+                ->pluck('competencia_id')
+            : collect();
+
+        // Competências pendentes = ativas para a área do servidor menos as já enviadas
+        $autoavaliacoesPendentes = ($ciclo && $servidor->area_id)
+            ? Competencia::ativas()
+                ->whereHas('areas', fn($q) => $q->where('areas.id', $servidor->area_id))
+                ->whereNotIn('id', $enviadas)
+                ->orderBy('nome')
                 ->get()
             : collect();
 

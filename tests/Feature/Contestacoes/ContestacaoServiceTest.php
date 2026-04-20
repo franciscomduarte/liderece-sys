@@ -9,7 +9,7 @@ use App\Services\ContestacaoService;
 it('servidor pode contestar avaliação enviada dentro do prazo', function () {
     $ciclo = Ciclo::factory()->ativo()->create(['prazo_contestacao_dias' => 10]);
     $servidor = Servidor::factory()->create();
-    $avaliacao = Avaliacao::factory()->enviada()->create([
+    $avaliacao = Avaliacao::factory()->enviada()->area()->create([
         'ciclo_id'    => $ciclo->id,
         'servidor_id' => $servidor->id,
         'avaliador_id' => $servidor->id,
@@ -24,7 +24,7 @@ it('servidor pode contestar avaliação enviada dentro do prazo', function () {
 it('servidor não pode contestar após o prazo', function () {
     $ciclo = Ciclo::factory()->ativo()->create(['prazo_contestacao_dias' => 5]);
     $servidor = Servidor::factory()->create();
-    $avaliacao = Avaliacao::factory()->enviada()->create([
+    $avaliacao = Avaliacao::factory()->enviada()->area()->create([
         'ciclo_id'    => $ciclo->id,
         'servidor_id' => $servidor->id,
         'avaliador_id' => $servidor->id,
@@ -44,7 +44,7 @@ it('servidor não pode contestar avaliação não enviada', function () {
 it('servidor só pode contestar uma vez', function () {
     $ciclo = Ciclo::factory()->ativo()->create(['prazo_contestacao_dias' => 10]);
     $servidor = Servidor::factory()->create();
-    $avaliacao = Avaliacao::factory()->enviada()->create([
+    $avaliacao = Avaliacao::factory()->enviada()->area()->create([
         'ciclo_id'    => $ciclo->id,
         'servidor_id' => $servidor->id,
         'avaliador_id' => $servidor->id,
@@ -60,7 +60,7 @@ it('servidor só pode contestar uma vez', function () {
 it('cria contestação com prazo calculado', function () {
     $ciclo = Ciclo::factory()->ativo()->create(['prazo_contestacao_dias' => 7]);
     $servidor = Servidor::factory()->create();
-    $avaliacao = Avaliacao::factory()->enviada()->create([
+    $avaliacao = Avaliacao::factory()->enviada()->area()->create([
         'ciclo_id'    => $ciclo->id,
         'servidor_id' => $servidor->id,
         'avaliador_id' => $servidor->id,
@@ -102,11 +102,25 @@ it('encerra contestações vencidas', function () {
     expect(Contestacao::where('status', 'pendente')->count())->toBe(1);
 });
 
+it('servidor não pode contestar autoavaliação', function () {
+    $ciclo = Ciclo::factory()->ativo()->create(['prazo_contestacao_dias' => 10]);
+    $servidor = Servidor::factory()->create();
+    $avaliacao = Avaliacao::factory()->enviada()->create([
+        'ciclo_id'    => $ciclo->id,
+        'servidor_id' => $servidor->id,
+        'avaliador_id'=> $servidor->id,
+        'tipo'        => 'autoavaliacao',
+        'enviada_at'  => now(),
+    ]);
+
+    expect(app(ContestacaoService::class)->podeContestar($avaliacao, $servidor))->toBeFalse();
+});
+
 it('não pode contestar avaliação de outro servidor', function () {
     $ciclo = Ciclo::factory()->ativo()->create(['prazo_contestacao_dias' => 10]);
     $servidor1 = Servidor::factory()->create();
     $servidor2 = Servidor::factory()->create();
-    $avaliacao = Avaliacao::factory()->enviada()->create([
+    $avaliacao = Avaliacao::factory()->enviada()->area()->create([
         'ciclo_id'    => $ciclo->id,
         'servidor_id' => $servidor1->id,
         'avaliador_id' => $servidor1->id,

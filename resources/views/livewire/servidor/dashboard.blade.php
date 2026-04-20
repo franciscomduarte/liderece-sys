@@ -73,17 +73,16 @@
             </div>
             @if($autoavaliacoesPendentes->isNotEmpty())
             <ul class="divide-y divide-[#eaeef2]">
-                @foreach($autoavaliacoesPendentes as $av)
+                @foreach($autoavaliacoesPendentes as $competencia)
                 <li class="px-5 py-3.5 flex items-center justify-between hover:bg-[#f6fafe] transition-colors">
                     <div class="min-w-0">
-                        <p class="text-sm font-semibold text-[#171c1f] truncate">{{ $av->competencia->nome }}</p>
-                        @php $tipo = $av->competencia->tipo; @endphp
+                        <p class="text-sm font-semibold text-[#171c1f] truncate">{{ $competencia->nome }}</p>
                         <span class="inline-block mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold
-                            {{ $tipo === 'comportamental' ? 'bg-[#d8e2ff] text-[#004395]' : ($tipo === 'técnica' ? 'bg-[#6ffbbe]/20 text-[#002113]' : 'bg-[#dee2f7] text-[#414657]') }}">
-                            {{ ucfirst($tipo) }}
+                            {{ $competencia->tipo === 'comportamental' ? 'bg-[#d8e2ff] text-[#004395]' : ($competencia->tipo === 'técnica' ? 'bg-[#6ffbbe]/20 text-[#002113]' : 'bg-[#dee2f7] text-[#414657]') }}">
+                            {{ ucfirst($competencia->tipo) }}
                         </span>
                     </div>
-                    <a href="{{ route('servidor.avaliacoes.form', $av) }}"
+                    <a href="{{ route('servidor.avaliacoes') }}"
                        class="shrink-0 ml-3 flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-br from-[#0058be] to-[#2170e4] text-white shadow-md shadow-[#0058be]/20 hover:scale-[1.02] transition-all">
                         <span class="material-symbols-outlined text-sm">edit</span>
                         Avaliar

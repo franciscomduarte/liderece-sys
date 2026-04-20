@@ -12,6 +12,7 @@ class ContestacaoService
 {
     public function podeContestar(Avaliacao $avaliacao, Servidor $servidor): bool
     {
+        if ($avaliacao->tipo === 'autoavaliacao') return false;
         if (! $avaliacao->isEnviada()) return false;
         if ($avaliacao->servidor_id !== $servidor->id) return false;
         if ($avaliacao->contestacao()->exists()) return false;
