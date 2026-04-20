@@ -73,9 +73,13 @@
                             type="button"
                             wire:click="$set('notas.{{ $item->id }}', '{{ $n }}')"
                             class="w-11 h-11 rounded-xl font-bold text-sm transition-all duration-200 hover:scale-105 active:scale-95
-                                {{ $notaAtual === $n
-                                    ? ($n === 1 ? 'bg-[#ba1a1a] text-white shadow-md' : ($n === 2 ? 'bg-orange-500 text-white shadow-md' : ($n === 3 ? 'bg-amber-400 text-white shadow-md' : ($n === 4 ? 'bg-[#006947] text-white shadow-md' : 'bg-[#004395] text-white shadow-md'))))
-                                    : 'bg-[#f0f4f8] text-[#424754] hover:bg-[#e4e9ed]' }}"
+                                @if($notaAtual === $n && $n === 1) bg-[#ba1a1a] text-white shadow-md
+                                @elseif($notaAtual === $n && $n === 2) bg-orange-500 text-white shadow-md
+                                @elseif($notaAtual === $n && $n === 3) bg-amber-400 text-white shadow-md
+                                @elseif($notaAtual === $n && $n === 4) bg-[#006947] text-white shadow-md
+                                @elseif($notaAtual === $n && $n === 5) bg-[#004395] text-white shadow-md
+                                @else bg-[#f0f4f8] text-[#424754] hover:bg-[#e4e9ed]
+                                @endif"
                         >{{ $n }}</button>
                         @endforeach
                     </div>

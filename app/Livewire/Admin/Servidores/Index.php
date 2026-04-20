@@ -65,7 +65,7 @@ class Index extends Component
         'area_id.required'   => 'A área é obrigatória.',
     ];
 
-    private function getUserId(): ?string
+    private function getUserId(): int|null
     {
         if (! $this->editingId) {
             return null;
@@ -95,7 +95,7 @@ class Index extends Component
         $this->email     = $s->email;
         $this->matricula = $s->matricula;
         $this->cargo     = $s->cargo;
-        $this->area_id   = $s->area_id;
+        $this->area_id   = $s->area_id ?? '';
         $this->perfil    = $s->perfil;
         $this->status    = $s->status;
         $this->resetErrorBag();
