@@ -48,9 +48,6 @@ jobs:
             mkdir -p bootstrap/cache
             chmod -R 775 bootstrap/cache
 
-            echo "🔐 Ajustando permissões..."
-            chown -R www-data:www-data $NEW_RELEASE
-
             echo "🔄 Atualizando versão atual..."
             ln -sfn $NEW_RELEASE $BASE_DIR/current
             cd $BASE_DIR/current
@@ -67,6 +64,9 @@ jobs:
 
             echo "🔁 Reiniciando filas..."
             php artisan queue:restart || true
+
+            echo "🔐 Ajustando permissões..."
+            chown -R www-data:www-data $NEW_RELEASE
 
             echo "🧹 Limpando releases antigas..."
             ls -dt $RELEASES_DIR/* | tail -n +6 | xargs rm -rf
