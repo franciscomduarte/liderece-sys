@@ -17,7 +17,7 @@
                 </div>
             </div>
 
-            <h2 class="font-['Manrope'] font-bold text-2xl text-[#171c1f] mb-1">Bem-vindo de volta</h2>
+            <h2 class="font-['Manrope'] font-bold text-2xl text-[#171c1f] mb-1">Bem-vindo de volta!/h2>
             <p class="text-[#727785] text-sm mb-8">Acesse com suas credenciais institucionais</p>
 
             {{-- Erros --}}
