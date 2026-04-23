@@ -12,7 +12,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('nome');
             $table->text('descricao')->nullable();
-            $table->enum('tipo', ['comportamental', 'técnica', 'gerencial']);
+            $table->enum('tipo', ['organizacional', 'técnica', 'gerencial']);
             $table->boolean('ativo')->default(true);
             $table->timestamps();
         });

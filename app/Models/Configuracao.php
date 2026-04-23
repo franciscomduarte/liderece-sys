@@ -13,7 +13,6 @@ class Configuracao extends Model
     protected $fillable = [
         'nome_organizacao',
         'escala_maxima',
-        'prazo_contestacao_dias',
         'notif_avaliacao_pendente',
         'notif_nova_avaliacao',
         'notif_relatorio_mensal',
@@ -33,7 +32,6 @@ class Configuracao extends Model
         return static::firstOrCreate([], [
             'nome_organizacao'         => 'Órgão Público Federal',
             'escala_maxima'            => 5,
-            'prazo_contestacao_dias'   => 10,
             'notif_avaliacao_pendente' => true,
             'notif_nova_avaliacao'     => true,
             'notif_relatorio_mensal'   => false,

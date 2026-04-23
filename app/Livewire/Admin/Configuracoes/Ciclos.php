@@ -17,31 +17,26 @@ class Ciclos extends Component
     public string $nome = '';
     public string $data_inicio = '';
     public string $data_fim = '';
-    public int $prazo_contestacao_dias = 10;
 
     protected function rules(): array
     {
         return [
-            'nome'                   => 'required|string|max:100',
-            'data_inicio'            => 'required|date',
-            'data_fim'               => 'required|date|after:data_inicio',
-            'prazo_contestacao_dias' => 'required|integer|min:1|max:90',
+            'nome'        => 'required|string|max:100',
+            'data_inicio' => 'required|date',
+            'data_fim'    => 'required|date|after:data_inicio',
         ];
     }
 
     protected array $messages = [
-        'nome.required'                   => 'O nome do ciclo é obrigatório.',
-        'data_inicio.required'            => 'A data de início é obrigatória.',
-        'data_fim.required'               => 'A data de término é obrigatória.',
-        'data_fim.after'                  => 'A data de término deve ser posterior ao início.',
-        'prazo_contestacao_dias.required' => 'O prazo de contestação é obrigatório.',
-        'prazo_contestacao_dias.min'      => 'O prazo mínimo é 1 dia.',
+        'nome.required'        => 'O nome do ciclo é obrigatório.',
+        'data_inicio.required' => 'A data de início é obrigatória.',
+        'data_fim.required'    => 'A data de término é obrigatória.',
+        'data_fim.after'       => 'A data de término deve ser posterior ao início.',
     ];
 
     public function openCreate(): void
     {
         $this->reset(['nome', 'data_inicio', 'data_fim']);
-        $this->prazo_contestacao_dias = 10;
         $this->resetErrorBag();
         $this->showModal = true;
     }
@@ -54,16 +49,14 @@ class Ciclos extends Component
 
         try {
             app(CicloService::class)->store([
-                'nome'                   => $this->nome,
-                'data_inicio'            => $this->data_inicio,
-                'data_fim'               => $this->data_fim,
-                'prazo_contestacao_dias' => $this->prazo_contestacao_dias,
+                'nome'        => $this->nome,
+                'data_inicio' => $this->data_inicio,
+                'data_fim'    => $this->data_fim,
             ], $servidor);
 
             $this->dispatch('toast', type: 'success', message: 'Ciclo criado com sucesso!');
             $this->showModal = false;
             $this->reset(['nome', 'data_inicio', 'data_fim']);
-            $this->prazo_contestacao_dias = 10;
         } catch (\RuntimeException $e) {
             $this->dispatch('toast', type: 'error', message: $e->getMessage());
         }

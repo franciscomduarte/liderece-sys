@@ -7,7 +7,7 @@ namespace App\Livewire\Servidor;
 use App\Models\Avaliacao;
 use App\Models\Ciclo;
 use App\Models\Competencia;
-use App\Models\Contestacao;
+use App\Services\GapService;
 use Livewire\Component;
 
 class Dashboard extends Component
@@ -17,7 +17,6 @@ class Dashboard extends Component
         $servidor = auth()->user()->servidor;
         $ciclo    = Ciclo::cicloAtivo();
 
-        // IDs de competências já concluídas (enviadas) no ciclo ativo
         $enviadas = $ciclo
             ? Avaliacao::where('ciclo_id', $ciclo->id)
                 ->where('servidor_id', $servidor->id)
@@ -26,7 +25,6 @@ class Dashboard extends Component
                 ->pluck('competencia_id')
             : collect();
 
-        // Competências pendentes = ativas para a área do servidor menos as já enviadas
         $autoavaliacoesPendentes = ($ciclo && $servidor->area_id)
             ? Competencia::ativas()
                 ->whereHas('areas', fn($q) => $q->where('areas.id', $servidor->area_id))
@@ -38,7 +36,7 @@ class Dashboard extends Component
         $resultadosRecentes = Avaliacao::where('servidor_id', $servidor->id)
             ->where('tipo', 'area')
             ->where('status', 'enviada')
-            ->with(['ciclo', 'competencia', 'contestacao'])
+            ->with(['ciclo', 'competencia'])
             ->orderByDesc('enviada_at')
             ->take(5)
             ->get();
@@ -50,23 +48,24 @@ class Dashboard extends Component
             ->get();
 
         $stats = [
-            'ciclo'                      => $ciclo,
-            'autoavaliacoes_pendentes'   => $autoavaliacoesPendentes->count(),
-            'resultados_disponiveis'     => $ciclo
+            'ciclo'                    => $ciclo,
+            'autoavaliacoes_pendentes' => $autoavaliacoesPendentes->count(),
+            'resultados_disponiveis'   => $ciclo
                 ? Avaliacao::where('ciclo_id', $ciclo->id)
                     ->where('servidor_id', $servidor->id)
                     ->where('tipo', 'area')
                     ->where('status', 'enviada')
                     ->count()
                 : 0,
-            'notificacoes_nao_lidas'     => $servidor->notificacoes()->where('lida', false)->count(),
-            'contestacoes_pendentes'     => Contestacao::where('servidor_id', $servidor->id)
-                ->where('status', 'pendente')
-                ->count(),
+            'notificacoes_nao_lidas'   => $servidor->notificacoes()->where('lida', false)->count(),
         ];
 
+        $gapsServidor = $ciclo
+            ? app(GapService::class)->gapsDoServidor($servidor, $ciclo)
+            : collect();
+
         return view('livewire.servidor.dashboard', compact(
-            'stats', 'autoavaliacoesPendentes', 'resultadosRecentes', 'notificacoes'
+            'stats', 'autoavaliacoesPendentes', 'resultadosRecentes', 'notificacoes', 'gapsServidor'
         ))
             ->layout('layouts.app')
             ->title('Dashboard');

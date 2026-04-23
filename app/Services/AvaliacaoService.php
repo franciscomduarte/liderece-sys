@@ -91,6 +91,28 @@ class AvaliacaoService
         return round($notas->avg(), 1);
     }
 
+    public static function labelsEscala(): array
+    {
+        return [
+            1 => 'Não demonstra',
+            2 => 'Raramente',
+            3 => 'Às vezes',
+            4 => 'Frequentemente',
+            5 => 'Consistentemente',
+        ];
+    }
+
+    public static function nivelProficiencia(float $media): int
+    {
+        return match(true) {
+            $media >= 4.5 => 5,
+            $media >= 4.0 => 4,
+            $media >= 3.0 => 3,
+            $media >= 2.0 => 2,
+            default       => 1,
+        };
+    }
+
     public function salvarComentarioGestor(Avaliacao $avaliacao, string $comentario): void
     {
         if ($avaliacao->isEnviada()) {

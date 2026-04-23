@@ -17,7 +17,7 @@ class Area extends Model
 
     protected $table = 'areas';
 
-    protected $fillable = ['nome', 'descricao', 'responsavel', 'parent_id'];
+    protected $fillable = ['nome', 'sigla', 'descricao', 'tipo', 'responsavel', 'parent_id'];
 
     public function parent(): BelongsTo
     {
@@ -36,7 +36,8 @@ class Area extends Model
 
     public function competencias(): BelongsToMany
     {
-        return $this->belongsToMany(Competencia::class, 'competencias_areas', 'area_id', 'competencia_id');
+        return $this->belongsToMany(Competencia::class, 'competencias_areas', 'area_id', 'competencia_id')
+            ->withPivot('nivel_esperado');
     }
 
     public function isRaiz(): bool

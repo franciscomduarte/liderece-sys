@@ -26,7 +26,7 @@
     <div class="float-in bg-[#f0f4f8] rounded-xl px-5 py-3" style="animation-delay: 60ms">
         <p class="text-xs font-bold text-[#424754] uppercase tracking-wide mb-2">Escala de avaliação</p>
         <div class="flex gap-3 flex-wrap">
-            @foreach([1 => 'Não demonstrado', 2 => 'Abaixo do esperado', 3 => 'Dentro do esperado', 4 => 'Acima do esperado', 5 => 'Referência'] as $n => $label)
+            @foreach(\App\Services\AvaliacaoService::labelsEscala() as $n => $label)
             <div class="flex items-center gap-1.5">
                 <span class="w-6 h-6 rounded-lg text-xs font-bold flex items-center justify-center
                     @if($n === 1) bg-[#ffdad6] text-[#ba1a1a]
@@ -43,7 +43,7 @@
     {{-- Itens: autoavaliação vs gestor --}}
     @php
         $autoRespostas = $autoavaliacao?->respostas->keyBy('item_id') ?? collect();
-        $labels = [1 => 'Não demonstrado', 2 => 'Abaixo do esperado', 3 => 'Dentro do esperado', 4 => 'Acima do esperado', 5 => 'Referência'];
+        $labels = \App\Services\AvaliacaoService::labelsEscala();
     @endphp
     <div class="space-y-3">
         @foreach($avaliacao->competencia->itensAtivos as $item)

@@ -39,7 +39,6 @@ Route::prefix('admin')->middleware(['auth', 'perfil:admin'])->group(function () 
     Route::get('/areas', App\Livewire\Admin\Areas\Index::class)->name('admin.areas');
     Route::get('/competencias', App\Livewire\Admin\Competencias\Index::class)->name('admin.competencias');
     Route::get('/avaliacoes', App\Livewire\Admin\Avaliacoes\Index::class)->name('admin.avaliacoes');
-    Route::get('/contestacoes', App\Livewire\Admin\Contestacoes\Index::class)->name('admin.contestacoes');
     Route::get('/relatorios', App\Livewire\Admin\Relatorios\Index::class)->name('admin.relatorios');
     Route::get('/relatorios/exportar/csv', [RelatorioController::class, 'adminCsv'])->name('admin.relatorios.exportar.csv');
     Route::get('/relatorios/exportar/pdf', [RelatorioController::class, 'adminPdf'])->name('admin.relatorios.exportar.pdf');
@@ -59,7 +58,6 @@ Route::prefix('gestor')->middleware(['auth', 'perfil:gestor'])->group(function (
     Route::get('/dashboard', App\Livewire\Gestor\Dashboard::class)->name('gestor.dashboard');
     Route::get('/avaliacoes', App\Livewire\Gestor\Avaliacoes\Index::class)->name('gestor.avaliacoes');
     Route::get('/avaliacoes/{avaliacao}/avaliar', App\Livewire\Gestor\Avaliacoes\Form::class)->name('gestor.avaliacoes.form');
-    Route::get('/contestacoes', App\Livewire\Gestor\Contestacoes\Index::class)->name('gestor.contestacoes');
     Route::get('/relatorios', App\Livewire\Gestor\Relatorios\Index::class)->name('gestor.relatorios');
     Route::get('/relatorios/exportar/csv', [RelatorioController::class, 'gestorCsv'])->name('gestor.relatorios.exportar.csv');
     Route::get('/servidores/{servidor}', App\Livewire\Gestor\Servidores\Perfil::class)->name('gestor.servidores.perfil');

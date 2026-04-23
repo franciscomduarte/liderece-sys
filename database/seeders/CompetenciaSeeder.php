@@ -22,7 +22,7 @@ class CompetenciaSeeder extends Seeder
         $competencias = [
             [
                 'nome' => 'Comunicação Efetiva',
-                'tipo' => 'comportamental',
+                'tipo' => 'organizacional',
                 'descricao' => 'Capacidade de se comunicar de forma clara, objetiva e assertiva',
                 'areas' => [$areaTI, $areaRH, $areaComm],
                 'itens' => [
@@ -33,7 +33,7 @@ class CompetenciaSeeder extends Seeder
             ],
             [
                 'nome' => 'Trabalho em Equipe',
-                'tipo' => 'comportamental',
+                'tipo' => 'organizacional',
                 'descricao' => 'Capacidade de colaborar e contribuir para o trabalho coletivo',
                 'areas' => [$areaTI, $areaRH, $areaComm, $areaFin, $areaJur],
                 'itens' => [
@@ -55,7 +55,7 @@ class CompetenciaSeeder extends Seeder
             ],
             [
                 'nome' => 'Gestão do Tempo e Prioridades',
-                'tipo' => 'comportamental',
+                'tipo' => 'organizacional',
                 'descricao' => 'Capacidade de organizar e priorizar atividades para cumprir prazos',
                 'areas' => [$areaTI, $areaRH, $areaComm, $areaFin, $areaJur],
                 'itens' => [

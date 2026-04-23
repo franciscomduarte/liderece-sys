@@ -113,3 +113,42 @@ it('não salva comentário em avaliação enviada', function () {
     expect(fn() => app(AvaliacaoService::class)->salvarComentarioGestor($avaliacao, 'Texto'))
         ->toThrow(\RuntimeException::class);
 });
+
+it('labelsEscala retorna os 5 rótulos corretos', function () {
+    $labels = AvaliacaoService::labelsEscala();
+
+    expect($labels)->toBe([
+        1 => 'Não demonstra',
+        2 => 'Raramente',
+        3 => 'Às vezes',
+        4 => 'Frequentemente',
+        5 => 'Consistentemente',
+    ]);
+});
+
+it('nivelProficiencia converte média para nível correto', function (float $media, int $nivelEsperado) {
+    expect(AvaliacaoService::nivelProficiencia($media))->toBe($nivelEsperado);
+})->with([
+    [1.0, 1],
+    [1.9, 1],
+    [2.0, 2],
+    [2.9, 2],
+    [3.0, 3],
+    [3.9, 3],
+    [4.0, 4],
+    [4.4, 4],
+    [4.5, 5],
+    [5.0, 5],
+]);
+
+it('accessor nivel_proficiencia retorna nulo quando media é nula', function () {
+    $avaliacao = Avaliacao::factory()->create(['media' => null, 'status' => 'rascunho']);
+
+    expect($avaliacao->nivel_proficiencia)->toBeNull();
+});
+
+it('accessor nivel_proficiencia converte media para nível', function () {
+    $avaliacao = Avaliacao::factory()->enviada()->create(['media' => 4.2]);
+
+    expect($avaliacao->nivel_proficiencia)->toBe(4);
+});

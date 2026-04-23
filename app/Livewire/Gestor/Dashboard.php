@@ -6,8 +6,8 @@ namespace App\Livewire\Gestor;
 
 use App\Models\Avaliacao;
 use App\Models\Ciclo;
-use App\Models\Contestacao;
 use App\Models\Servidor;
+use App\Services\GapService;
 use Livewire\Component;
 
 class Dashboard extends Component
@@ -23,27 +23,20 @@ class Dashboard extends Component
             : collect();
 
         $stats = [
-            'ciclo'                   => $ciclo,
-            'total_servidores'        => $servidoresIds->count(),
-            'avaliacoes_pendentes'    => $ciclo
+            'ciclo'                => $ciclo,
+            'total_servidores'     => $servidoresIds->count(),
+            'avaliacoes_pendentes' => $ciclo
                 ? Avaliacao::where('ciclo_id', $ciclo->id)
                     ->where('tipo', 'area')
                     ->where('status', 'rascunho')
                     ->whereIn('servidor_id', $servidoresIds)
                     ->count()
                 : 0,
-            'avaliacoes_enviadas'     => $ciclo
+            'avaliacoes_enviadas'  => $ciclo
                 ? Avaliacao::where('ciclo_id', $ciclo->id)
                     ->where('tipo', 'area')
                     ->where('status', 'enviada')
                     ->whereIn('servidor_id', $servidoresIds)
-                    ->count()
-                : 0,
-            'contestacoes_pendentes'  => $ciclo
-                ? Contestacao::where('status', 'pendente')
-                    ->whereHas('avaliacao', fn ($q) => $q
-                        ->where('ciclo_id', $ciclo->id)
-                        ->whereIn('servidor_id', $servidoresIds))
                     ->count()
                 : 0,
         ];
@@ -60,18 +53,11 @@ class Dashboard extends Component
                 ->get()
             : collect();
 
-        $contestacoes = $ciclo
-            ? Contestacao::where('status', 'pendente')
-                ->whereHas('avaliacao', fn ($q) => $q
-                    ->where('ciclo_id', $ciclo->id)
-                    ->whereIn('servidor_id', $servidoresIds))
-                ->with(['servidor', 'avaliacao.competencia'])
-                ->latest()
-                ->take(5)
-                ->get()
-            : collect();
+        $gapService    = app(GapService::class);
+        $gapsGestor    = $ciclo ? $gapService->gapsDoServidor($gestor, $ciclo) : collect();
+        $gapsDaEquipe  = ($ciclo && $areaId) ? $gapService->gapsDaArea($areaId, $ciclo) : collect();
 
-        return view('livewire.gestor.dashboard', compact('stats', 'servidores', 'contestacoes'))
+        return view('livewire.gestor.dashboard', compact('stats', 'servidores', 'gapsGestor', 'gapsDaEquipe'))
             ->layout('layouts.app')
             ->title('Dashboard');
     }

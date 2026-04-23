@@ -8,11 +8,11 @@
     <div class="float-in bg-white rounded-2xl px-6 py-5 shadow-[0_12px_40px_rgba(23,28,31,0.06)] ring-1 ring-black/[0.04]">
         <div class="flex items-start gap-4">
             <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0
-                @if($avaliacao->competencia->tipo === 'comportamental') bg-[#d8e2ff]
+                @if($avaliacao->competencia->tipo === 'organizacional') bg-[#d8e2ff]
                 @elseif($avaliacao->competencia->tipo === 'técnica') bg-[#6ffbbe]/30
                 @else bg-[#dee2f7] @endif">
                 <span class="material-symbols-outlined text-2xl
-                    @if($avaliacao->competencia->tipo === 'comportamental') text-[#004395]
+                    @if($avaliacao->competencia->tipo === 'organizacional') text-[#004395]
                     @elseif($avaliacao->competencia->tipo === 'técnica') text-[#002113]
                     @else text-[#414657] @endif">
                     @if($avaliacao->competencia->tipo === 'gerencial') groups @elseif($avaliacao->competencia->tipo === 'técnica') engineering @else psychology @endif
@@ -22,7 +22,7 @@
                 <div class="flex items-center gap-2 flex-wrap mb-1">
                     <h2 class="font-['Manrope'] font-bold text-[#171c1f] text-lg">{{ $avaliacao->competencia->nome }}</h2>
                     <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold
-                        @if($avaliacao->competencia->tipo === 'comportamental') bg-[#d8e2ff] text-[#004395]
+                        @if($avaliacao->competencia->tipo === 'organizacional') bg-[#d8e2ff] text-[#004395]
                         @elseif($avaliacao->competencia->tipo === 'técnica') bg-[#6ffbbe]/40 text-[#002113]
                         @else bg-[#dee2f7] text-[#414657] @endif">
                         {{ ucfirst($avaliacao->competencia->tipo) }}
@@ -39,7 +39,7 @@
     <div class="float-in bg-[#f0f4f8] rounded-xl px-5 py-3" style="animation-delay: 60ms">
         <p class="text-xs font-bold text-[#424754] uppercase tracking-wide mb-2">Escala de avaliação</p>
         <div class="flex gap-3 flex-wrap">
-            @foreach([1 => 'Não demonstrado', 2 => 'Abaixo do esperado', 3 => 'Dentro do esperado', 4 => 'Acima do esperado', 5 => 'Referência'] as $n => $label)
+            @foreach(\App\Services\AvaliacaoService::labelsEscala() as $n => $label)
             <div class="flex items-center gap-1.5">
                 <span class="w-6 h-6 rounded-lg text-xs font-bold flex items-center justify-center
                     @if($n === 1) bg-[#ffdad6] text-[#ba1a1a]

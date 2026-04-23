@@ -21,6 +21,7 @@ class Index extends Component
 
     public string $nome = '';
     public string $descricao = '';
+    public string $tipo = '';
     public string $responsavel = '';
     public string $parent_id = '';
 
@@ -29,6 +30,7 @@ class Index extends Component
         return [
             'nome'        => 'required|string|max:100',
             'descricao'   => 'nullable|string|max:500',
+            'tipo'        => 'nullable|in:meio,finalistica',
             'responsavel' => 'nullable|string|max:100',
             'parent_id'   => 'nullable|exists:areas,id',
         ];
@@ -47,7 +49,7 @@ class Index extends Component
 
     public function openCreate(): void
     {
-        $this->reset(['nome', 'descricao', 'responsavel', 'parent_id', 'editingId']);
+        $this->reset(['nome', 'descricao', 'tipo', 'responsavel', 'parent_id', 'editingId']);
         $this->resetErrorBag();
         $this->showModal = true;
     }
@@ -58,6 +60,7 @@ class Index extends Component
         $this->editingId    = $id;
         $this->nome         = $area->nome;
         $this->descricao    = $area->descricao ?? '';
+        $this->tipo         = $area->tipo ?? '';
         $this->responsavel  = $area->responsavel ?? '';
         $this->parent_id    = $area->parent_id ?? '';
         $this->resetErrorBag();
@@ -71,6 +74,7 @@ class Index extends Component
         $data = [
             'nome'        => $this->nome,
             'descricao'   => $this->descricao ?: null,
+            'tipo'        => $this->tipo ?: null,
             'responsavel' => $this->responsavel ?: null,
             'parent_id'   => $this->parent_id ?: null,
         ];
@@ -86,7 +90,7 @@ class Index extends Component
         }
 
         $this->showModal = false;
-        $this->reset(['nome', 'descricao', 'responsavel', 'parent_id', 'editingId']);
+        $this->reset(['nome', 'descricao', 'tipo', 'responsavel', 'parent_id', 'editingId']);
     }
 
     public function confirmDelete(string $id): void

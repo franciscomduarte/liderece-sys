@@ -43,6 +43,35 @@
             @endforeach
         </div>
 
+        {{-- Panorama de Gap Institucional --}}
+        @if($resumoGap && $resumoGap['total'] > 0)
+        <div class="bg-white rounded-2xl p-6 shadow-[0_12px_40px_rgba(23,28,31,0.06)]">
+            <h3 class="font-['Manrope'] font-bold text-[#171c1f] mb-1 flex items-center gap-2">
+                <span class="material-symbols-outlined text-[#0058be]">area_chart</span>
+                Panorama de Gap Institucional
+            </h3>
+            <p class="text-xs text-[#727785] mb-5">Ciclo ativo · {{ $resumoGap['total'] }} itens competência-servidor avaliados</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                @foreach([
+                    ['key' => 'adequado',     'label' => 'Adequado',             'icon' => 'check_circle', 'bg' => 'bg-[#6ffbbe]/20',  'text' => 'text-[#006947]'],
+                    ['key' => 'leve',         'label' => 'Desenvolvimento leve', 'icon' => 'warning',      'bg' => 'bg-amber-50',       'text' => 'text-amber-700'],
+                    ['key' => 'estrategico',  'label' => 'Prioridade estratégica','icon'=> 'priority_high','bg' => 'bg-[#ffdad6]',      'text' => 'text-[#ba1a1a]'],
+                    ['key' => 'sem_avaliacao','label' => 'Sem avaliação',         'icon' => 'schedule',     'bg' => 'bg-[#f0f4f8]',      'text' => 'text-[#727785]'],
+                ] as $card)
+                @php $n = $resumoGap[$card['key']]; $pct = $resumoGap['total'] > 0 ? round($n / $resumoGap['total'] * 100) : 0; @endphp
+                <div class="rounded-xl {{ $card['bg'] }} px-4 py-3">
+                    <div class="flex items-center gap-1.5 mb-2">
+                        <span class="material-symbols-outlined text-lg {{ $card['text'] }}">{{ $card['icon'] }}</span>
+                        <span class="text-xs font-bold {{ $card['text'] }}">{{ $card['label'] }}</span>
+                    </div>
+                    <p class="font-['Manrope'] font-extrabold text-2xl {{ $card['text'] }}">{{ $n }}</p>
+                    <p class="text-xs {{ $card['text'] }} opacity-70 mt-0.5">{{ $pct }}% do total</p>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
         {{-- Checklist de setup (quando banco vazio) --}}
         @if($stats['areas'] === 0 || $stats['servidores'] === 0 || $stats['competencias'] === 0)
         <div class="bg-white rounded-2xl p-6 shadow-[0_12px_40px_rgba(23,28,31,0.06)]">

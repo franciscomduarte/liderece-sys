@@ -45,7 +45,7 @@
                 @php
                     $tipo = $avaliacao->competencia->tipo;
                     $badgeClass = match($tipo) {
-                        'comportamental' => 'bg-[#d8e2ff] text-[#004395]',
+                        'organizacional' => 'bg-[#d8e2ff] text-[#004395]',
                         'técnica'        => 'bg-[#6ffbbe]/20 text-[#002113]',
                         default          => 'bg-[#dee2f7] text-[#414657]',
                     };
@@ -64,15 +64,6 @@
                         {{ $avaliacao->enviada_at->format('d/m/Y') }}
                     </p>
                 </div>
-
-                @if($avaliacao->contestacao)
-                @php $st = $avaliacao->contestacao->status; @endphp
-                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold
-                    {{ $st === 'respondida' ? 'bg-[#d8e2ff] text-[#004395]' : ($st === 'encerrada' ? 'bg-[#f0f4f8] text-[#727785]' : 'bg-amber-50 text-amber-700') }}">
-                    <span class="material-symbols-outlined text-[10px]">gavel</span>
-                    {{ ucfirst($st) }}
-                </span>
-                @endif
             </div>
         </a>
         @endforeach

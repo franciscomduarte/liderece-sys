@@ -17,8 +17,7 @@ class Ciclo extends Model
     protected $table = 'ciclos';
 
     protected $fillable = [
-        'nome', 'data_inicio', 'data_fim', 'status',
-        'prazo_contestacao_dias', 'created_by',
+        'nome', 'data_inicio', 'data_fim', 'status', 'created_by',
     ];
 
     protected $casts = [

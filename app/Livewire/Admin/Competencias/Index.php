@@ -24,22 +24,26 @@ class Index extends Component
 
     public string $nome = '';
     public string $descricao = '';
-    public string $tipo = 'comportamental';
+    public string $tipo = 'organizacional';
     public bool $ativo = true;
     public array $itens = [['descricao' => '']];
     public array $areaIds = [];
+    public array $niveisEsperados = [];
+    public bool $selecionarTodasAreas = false;
 
     protected function rules(): array
     {
         return [
             'nome'             => 'required|string|max:150',
             'descricao'        => 'nullable|string|max:1000',
-            'tipo'             => 'required|in:comportamental,técnica,gerencial',
+            'tipo'             => 'required|in:organizacional,técnica,gerencial',
             'ativo'            => 'boolean',
             'itens'            => 'required|array|min:1',
             'itens.*.descricao' => 'nullable|string|max:500',
-            'areaIds'          => 'array',
-            'areaIds.*'        => 'exists:areas,id',
+            'areaIds'               => 'array',
+            'areaIds.*'             => 'exists:areas,id',
+            'niveisEsperados'       => 'array',
+            'niveisEsperados.*'     => 'integer|min:1|max:5',
         ];
     }
 
@@ -51,6 +55,16 @@ class Index extends Component
 
     public function updatingSearch(): void { $this->resetPage(); }
     public function updatingFiltroTipo(): void { $this->resetPage(); }
+
+    public function toggleTodasAreas(): void
+    {
+        if ($this->selecionarTodasAreas) {
+            $this->areaIds = Area::pluck('id')->toArray();
+        } else {
+            $this->areaIds = [];
+            $this->niveisEsperados = [];
+        }
+    }
 
     public function addItem(): void
     {
@@ -66,8 +80,8 @@ class Index extends Component
 
     public function openCreate(): void
     {
-        $this->reset(['nome', 'descricao', 'editingId', 'areaIds']);
-        $this->tipo  = 'comportamental';
+        $this->reset(['nome', 'descricao', 'editingId', 'areaIds', 'niveisEsperados', 'selecionarTodasAreas']);
+        $this->tipo  = 'organizacional';
         $this->ativo = true;
         $this->itens = [['descricao' => '']];
         $this->resetErrorBag();
@@ -84,6 +98,9 @@ class Index extends Component
         $this->ativo     = $c->ativo;
         $this->itens     = $c->itens->map(fn ($i) => ['descricao' => $i->descricao])->toArray();
         $this->areaIds   = $c->areas->pluck('id')->toArray();
+        $this->niveisEsperados = $c->areas->mapWithKeys(
+            fn ($a) => [$a->id => $a->pivot->nivel_esperado]
+        )->toArray();
 
         if (empty($this->itens)) {
             $this->itens = [['descricao' => '']];
@@ -107,16 +124,16 @@ class Index extends Component
         $service = app(CompetenciaService::class);
 
         if ($this->editingId) {
-            $service->update(Competencia::findOrFail($this->editingId), $data, $this->itens, $this->areaIds);
+            $service->update(Competencia::findOrFail($this->editingId), $data, $this->itens, $this->areaIds, $this->niveisEsperados);
             $this->dispatch('toast', type: 'success', message: 'Competência atualizada com sucesso!');
         } else {
-            $service->store($data, $this->itens, $this->areaIds);
+            $service->store($data, $this->itens, $this->areaIds, $this->niveisEsperados);
             $this->dispatch('toast', type: 'success', message: 'Competência criada com sucesso!');
         }
 
         $this->showModal = false;
-        $this->reset(['nome', 'descricao', 'editingId', 'areaIds']);
-        $this->tipo  = 'comportamental';
+        $this->reset(['nome', 'descricao', 'editingId', 'areaIds', 'niveisEsperados', 'selecionarTodasAreas']);
+        $this->tipo  = 'organizacional';
         $this->ativo = true;
         $this->itens = [['descricao' => '']];
     }

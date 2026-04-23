@@ -3,16 +3,14 @@
 namespace App\Providers;
 
 use App\Models\Avaliacao;
-use App\Models\Contestacao;
 use App\Policies\AvaliacaoPolicy;
-use App\Policies\ContestacaoPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends AuthServiceProvider
 {
     protected $policies = [
-        Avaliacao::class    => AvaliacaoPolicy::class,
-        Contestacao::class  => ContestacaoPolicy::class,
+        Avaliacao::class => AvaliacaoPolicy::class,
     ];
 
     public function register(): void {}
@@ -20,5 +18,8 @@ class AppServiceProvider extends AuthServiceProvider
     public function boot(): void
     {
         $this->registerPolicies();
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
     }
 }

@@ -29,7 +29,7 @@
     @endif
 
     {{-- KPI cards --}}
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="float-in bg-white rounded-2xl px-5 py-4 shadow-[0_12px_40px_rgba(23,28,31,0.06)] ring-1 ring-black/[0.04]" style="animation-delay:50ms">
             <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center mb-3">
                 <span class="material-symbols-outlined text-amber-600 text-lg">edit_note</span>
@@ -53,15 +53,73 @@
             <p class="font-['Manrope'] font-extrabold text-3xl text-[#171c1f]">{{ $stats['notificacoes_nao_lidas'] }}</p>
             <p class="text-[#727785] text-xs mt-1">Notificações não lidas</p>
         </div>
+    </div>
 
-        <div class="float-in bg-white rounded-2xl px-5 py-4 shadow-[0_12px_40px_rgba(23,28,31,0.06)] ring-1 ring-black/[0.04]" style="animation-delay:200ms">
-            <div class="w-10 h-10 rounded-xl bg-[#ffdad6] flex items-center justify-center mb-3">
-                <span class="material-symbols-outlined text-[#93000a] text-lg">gavel</span>
+    {{-- Diagnóstico de Gap --}}
+    @if($gapsServidor->isNotEmpty())
+    <div class="float-in bg-white rounded-2xl shadow-[0_12px_40px_rgba(23,28,31,0.06)] ring-1 ring-black/[0.04] overflow-hidden" style="animation-delay:200ms">
+        <div class="px-5 py-4 border-b border-[#eaeef2] flex items-center gap-3">
+            <div class="w-8 h-8 rounded-xl bg-[#d8e2ff] flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[#004395] text-lg">area_chart</span>
             </div>
-            <p class="font-['Manrope'] font-extrabold text-3xl text-[#171c1f]">{{ $stats['contestacoes_pendentes'] }}</p>
-            <p class="text-[#727785] text-xs mt-1">Contestações aguardando</p>
+            <div>
+                <h3 class="font-['Manrope'] font-bold text-sm text-[#171c1f]">Diagnóstico de Competências</h3>
+                <p class="text-xs text-[#727785]">Gap = Nível esperado − Nível atual</p>
+            </div>
+        </div>
+        <div class="divide-y divide-[#eaeef2]">
+            @foreach($gapsServidor as $item)
+            @php
+                $classeGap = $item['classificacao'];
+                [$gapBg, $gapText, $gapIcon] = match($classeGap) {
+                    'adequado'    => ['bg-[#6ffbbe]/20', 'text-[#006947]', 'check_circle'],
+                    'leve'        => ['bg-amber-50',     'text-amber-700', 'warning'],
+                    'estrategico' => ['bg-[#ffdad6]',    'text-[#ba1a1a]', 'priority_high'],
+                    default       => ['bg-[#f0f4f8]',    'text-[#727785]', 'help'],
+                };
+            @endphp
+            <div class="px-5 py-3 flex items-center gap-4 hover:bg-[#f6fafe] transition-colors">
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-[#171c1f] truncate">{{ $item['competencia']->nome }}</p>
+                    <div class="flex items-center gap-2 mt-1">
+                        <span class="text-xs text-[#727785]">
+                            Esperado:
+                            <strong class="text-[#424754]">
+                                Nível {{ $item['nivel_esperado'] }} — {{ \App\Services\GapService::descricaoNivel($item['nivel_esperado']) }}
+                            </strong>
+                        </span>
+                        @if($item['nivel_atual'] !== null)
+                        <span class="text-[#c2c6d6]">·</span>
+                        <span class="text-xs text-[#727785]">
+                            Atual:
+                            <strong class="text-[#424754]">
+                                Nível {{ $item['nivel_atual'] }} — {{ \App\Services\GapService::descricaoNivel($item['nivel_atual']) }}
+                            </strong>
+                        </span>
+                        @endif
+                    </div>
+                </div>
+                <div class="shrink-0 flex items-center gap-2">
+                    @if($item['classificacao'] !== null)
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold {{ $gapBg }} {{ $gapText }}">
+                        <span class="material-symbols-outlined text-sm">{{ $gapIcon }}</span>
+                        @if($item['gap'] === 0) Adequado
+                        @elseif($item['gap'] === 1) Gap +1
+                        @else Gap +{{ $item['gap'] }}
+                        @endif
+                    </span>
+                    @else
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f0f4f8] text-[#727785]">
+                        <span class="material-symbols-outlined text-sm">schedule</span>
+                        Pendente
+                    </span>
+                    @endif
+                </div>
+            </div>
+            @endforeach
         </div>
     </div>
+    @endif
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
@@ -78,7 +136,7 @@
                     <div class="min-w-0">
                         <p class="text-sm font-semibold text-[#171c1f] truncate">{{ $competencia->nome }}</p>
                         <span class="inline-block mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold
-                            {{ $competencia->tipo === 'comportamental' ? 'bg-[#d8e2ff] text-[#004395]' : ($competencia->tipo === 'técnica' ? 'bg-[#6ffbbe]/20 text-[#002113]' : 'bg-[#dee2f7] text-[#414657]') }}">
+                            {{ $competencia->tipo === 'organizacional' ? 'bg-[#d8e2ff] text-[#004395]' : ($competencia->tipo === 'técnica' ? 'bg-[#6ffbbe]/20 text-[#002113]' : 'bg-[#dee2f7] text-[#414657]') }}">
                             {{ ucfirst($competencia->tipo) }}
                         </span>
                     </div>
@@ -114,15 +172,10 @@
                             <p class="text-sm font-semibold text-[#171c1f] truncate">{{ $av->competencia->nome }}</p>
                             <p class="text-xs text-[#727785]">{{ $av->ciclo->nome }} · {{ $av->enviada_at->format('d/m/Y') }}</p>
                         </div>
-                        <div class="flex items-center gap-2 shrink-0">
-                            @if($av->contestacao)
-                            <span class="text-xs px-2 py-0.5 rounded-full font-bold bg-amber-50 text-amber-700">Contestada</span>
-                            @endif
-                            <span class="font-['Manrope'] font-extrabold text-lg
-                                {{ $av->media >= 4 ? 'text-[#006947]' : ($av->media >= 3 ? 'text-[#0058be]' : 'text-amber-600') }}">
-                                {{ number_format($av->media, 1) }}
-                            </span>
-                        </div>
+                        <span class="font-['Manrope'] font-extrabold text-lg shrink-0
+                            {{ $av->media >= 4 ? 'text-[#006947]' : ($av->media >= 3 ? 'text-[#0058be]' : 'text-amber-600') }}">
+                            {{ number_format($av->media, 1) }}
+                        </span>
                     </a>
                 </li>
                 @endforeach

@@ -34,6 +34,7 @@
                 <tr class="bg-[#f0f4f8] border-b border-[#eaeef2]">
                     <th class="text-left px-6 py-3.5 text-xs font-bold uppercase tracking-widest text-[#424754]">Área</th>
                     <th class="text-left px-6 py-3.5 text-xs font-bold uppercase tracking-widest text-[#424754] hidden md:table-cell">Área pai</th>
+                    <th class="text-left px-6 py-3.5 text-xs font-bold uppercase tracking-widest text-[#424754] hidden md:table-cell">Tipo</th>
                     <th class="text-left px-6 py-3.5 text-xs font-bold uppercase tracking-widest text-[#424754] hidden md:table-cell">Responsável</th>
                     <th class="text-center px-6 py-3.5 text-xs font-bold uppercase tracking-widest text-[#424754] hidden sm:table-cell">Servidores</th>
                     <th class="px-6 py-3.5"></th>
@@ -44,7 +45,7 @@
                 @include('livewire.admin.areas._row', ['area' => $area, 'indent' => 0])
                 @empty
                 <tr>
-                    <td colspan="5" class="px-6 py-16 text-center">
+                    <td colspan="6" class="px-6 py-16 text-center">
                         <span class="material-symbols-outlined text-4xl text-[#c2c6d6] block mb-3">search_off</span>
                         <p class="text-[#727785] text-sm">Nenhuma área encontrada para "{{ $search }}"</p>
                     </td>
@@ -103,6 +104,7 @@
                 <tr class="bg-[#f0f4f8] border-b border-[#eaeef2]">
                     <th class="text-left px-6 py-3.5 text-xs font-bold uppercase tracking-widest text-[#424754]">Área</th>
                     <th class="text-left px-6 py-3.5 text-xs font-bold uppercase tracking-widest text-[#424754] hidden md:table-cell">Área pai</th>
+                    <th class="text-left px-6 py-3.5 text-xs font-bold uppercase tracking-widest text-[#424754] hidden md:table-cell">Tipo</th>
                     <th class="text-left px-6 py-3.5 text-xs font-bold uppercase tracking-widest text-[#424754] hidden md:table-cell">Responsável</th>
                     <th class="text-center px-6 py-3.5 text-xs font-bold uppercase tracking-widest text-[#424754] hidden sm:table-cell">Servidores</th>
                     <th class="px-6 py-3.5"></th>
@@ -176,6 +178,17 @@
                         @error('nome') border-[#ba1a1a] bg-[#ffdad6]/20 @else border-[#c2c6d6] @enderror"
                 >
                 @error('nome') <p class="text-xs text-[#ba1a1a] mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-[#424754] uppercase tracking-wide mb-1.5">Tipo de área</label>
+                <select wire:model="tipo"
+                    class="w-full px-3.5 py-2.5 border border-[#c2c6d6] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0058be]/30 focus:border-[#0058be] transition-all bg-white @error('tipo') border-[#ba1a1a] @enderror">
+                    <option value="">Não classificada</option>
+                    <option value="meio">Meio</option>
+                    <option value="finalistica">Finalística</option>
+                </select>
+                @error('tipo') <p class="text-xs text-[#ba1a1a] mt-1">{{ $message }}</p> @enderror
             </div>
 
             <div>

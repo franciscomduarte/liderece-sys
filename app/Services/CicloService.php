@@ -16,12 +16,11 @@ class CicloService
         }
 
         return Ciclo::create([
-            'nome'                   => $data['nome'],
-            'data_inicio'            => $data['data_inicio'],
-            'data_fim'               => $data['data_fim'],
-            'prazo_contestacao_dias' => $data['prazo_contestacao_dias'],
-            'status'                 => 'inativo',
-            'created_by'             => $criador->id,
+            'nome'        => $data['nome'],
+            'data_inicio' => $data['data_inicio'],
+            'data_fim'    => $data['data_fim'],
+            'status'      => 'inativo',
+            'created_by'  => $criador->id,
         ]);
     }
 

@@ -30,6 +30,11 @@ class Index extends Component
     public string $email = '';
     public string $matricula = '';
     public string $cargo = '';
+    public string $data_nascimento = '';
+    public string $data_ingresso = '';
+    public string $escolaridade = '';
+    public string $genero = '';
+    public string $raca = '';
     public string $area_id = '';
     public string $perfil = 'servidor';
     public string $status = 'ativo';
@@ -45,13 +50,18 @@ class Index extends Component
             : 'required|string|max:20|unique:servidores,matricula';
 
         return [
-            'nome'      => 'required|string|max:150',
-            'email'     => $emailRule,
-            'matricula' => $matriculaRule,
-            'cargo'     => 'required|string|max:100',
-            'area_id'   => 'required|exists:areas,id',
-            'perfil'    => 'required|in:admin,gestor,servidor',
-            'status'    => 'required|in:ativo,inativo',
+            'nome'            => 'required|string|max:150',
+            'email'           => $emailRule,
+            'matricula'       => $matriculaRule,
+            'cargo'           => 'required|string|max:100',
+            'data_nascimento' => 'nullable|date',
+            'data_ingresso'   => 'nullable|date',
+            'escolaridade'    => 'nullable|string|max:50',
+            'genero'          => 'nullable|string|max:30',
+            'raca'            => 'nullable|string|max:30',
+            'area_id'         => 'required|exists:areas,id',
+            'perfil'          => 'required|in:admin,gestor,servidor',
+            'status'          => 'required|in:ativo,inativo',
         ];
     }
 
@@ -80,7 +90,7 @@ class Index extends Component
 
     public function openCreate(): void
     {
-        $this->reset(['nome', 'email', 'matricula', 'cargo', 'area_id', 'editingId']);
+        $this->reset(['nome', 'email', 'matricula', 'cargo', 'data_nascimento', 'data_ingresso', 'escolaridade', 'genero', 'raca', 'area_id', 'editingId']);
         $this->perfil = 'servidor';
         $this->status = 'ativo';
         $this->resetErrorBag();
@@ -90,14 +100,19 @@ class Index extends Component
     public function openEdit(string $id): void
     {
         $s = Servidor::findOrFail($id);
-        $this->editingId = $id;
-        $this->nome      = $s->nome;
-        $this->email     = $s->email;
-        $this->matricula = $s->matricula;
-        $this->cargo     = $s->cargo;
-        $this->area_id   = $s->area_id ?? '';
-        $this->perfil    = $s->perfil;
-        $this->status    = $s->status;
+        $this->editingId        = $id;
+        $this->nome             = $s->nome;
+        $this->email            = $s->email;
+        $this->matricula        = $s->matricula;
+        $this->cargo            = $s->cargo;
+        $this->data_nascimento  = $s->data_nascimento?->format('Y-m-d') ?? '';
+        $this->data_ingresso    = $s->data_ingresso?->format('Y-m-d') ?? '';
+        $this->escolaridade     = $s->escolaridade ?? '';
+        $this->genero           = $s->genero ?? '';
+        $this->raca             = $s->raca ?? '';
+        $this->area_id          = $s->area_id ?? '';
+        $this->perfil           = $s->perfil;
+        $this->status           = $s->status;
         $this->resetErrorBag();
         $this->showModal = true;
     }
@@ -107,13 +122,18 @@ class Index extends Component
         $this->validate();
 
         $data = [
-            'nome'      => $this->nome,
-            'email'     => $this->email,
-            'matricula' => $this->matricula,
-            'cargo'     => $this->cargo,
-            'area_id'   => $this->area_id,
-            'perfil'    => $this->perfil,
-            'status'    => $this->status,
+            'nome'            => $this->nome,
+            'email'           => $this->email,
+            'matricula'       => $this->matricula,
+            'cargo'           => $this->cargo,
+            'data_nascimento' => $this->data_nascimento ?: null,
+            'data_ingresso'   => $this->data_ingresso ?: null,
+            'escolaridade'    => $this->escolaridade ?: null,
+            'genero'          => $this->genero ?: null,
+            'raca'            => $this->raca ?: null,
+            'area_id'         => $this->area_id,
+            'perfil'          => $this->perfil,
+            'status'          => $this->status,
         ];
 
         $service = app(ServidorService::class);
@@ -127,7 +147,7 @@ class Index extends Component
         }
 
         $this->showModal = false;
-        $this->reset(['nome', 'email', 'matricula', 'cargo', 'area_id', 'editingId']);
+        $this->reset(['nome', 'email', 'matricula', 'cargo', 'data_nascimento', 'data_ingresso', 'escolaridade', 'genero', 'raca', 'area_id', 'editingId']);
         $this->perfil = 'servidor';
         $this->status = 'ativo';
     }

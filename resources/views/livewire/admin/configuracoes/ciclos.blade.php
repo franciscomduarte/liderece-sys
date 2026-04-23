@@ -6,7 +6,6 @@
 
     @include('layouts.components.config-subnav')
 
-
     {{-- Banner ciclo ativo --}}
     @php $cicloAtivo = $ciclos->firstWhere('status', 'ativo'); @endphp
     @if($cicloAtivo)
@@ -16,7 +15,6 @@
             <p class="text-[#006947] font-['Manrope'] font-bold text-sm">Ciclo ativo: {{ $cicloAtivo->nome }}</p>
             <p class="text-[#005236] text-xs mt-0.5">
                 {{ $cicloAtivo->data_inicio->format('d/m/Y') }} → {{ $cicloAtivo->data_fim->format('d/m/Y') }}
-                · Prazo contestação: {{ $cicloAtivo->prazo_contestacao_dias }} dias
             </p>
         </div>
     </div>
@@ -44,7 +42,6 @@
             class="float-in bg-white rounded-2xl px-5 py-4 shadow-[0_12px_40px_rgba(23,28,31,0.06)] ring-1 ring-black/[0.04] hover:shadow-[0_20px_60px_rgba(23,28,31,0.10)] hover:-translate-y-0.5 transition-all duration-300 group flex items-center gap-4"
             style="animation-delay: {{ $loop->index * 50 }}ms"
         >
-            {{-- Status icon --}}
             <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0
                 {{ $ciclo->isAtivo() ? 'bg-[#00855b]/10' : 'bg-[#f0f4f8]' }}">
                 <span class="material-symbols-outlined text-xl {{ $ciclo->isAtivo() ? 'text-[#006947]' : 'text-[#727785]' }}">
@@ -52,7 +49,6 @@
                 </span>
             </div>
 
-            {{-- Info --}}
             <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2 flex-wrap">
                     <h3 class="font-['Manrope'] font-bold text-[#171c1f] text-sm">{{ $ciclo->nome }}</h3>
@@ -67,10 +63,6 @@
                         <span class="material-symbols-outlined text-sm">calendar_today</span>
                         {{ $ciclo->data_inicio->format('d/m/Y') }} → {{ $ciclo->data_fim->format('d/m/Y') }}
                     </span>
-                    <span class="flex items-center gap-1">
-                        <span class="material-symbols-outlined text-sm">timer</span>
-                        {{ $ciclo->prazo_contestacao_dias }} dias para contestar
-                    </span>
                     @if($ciclo->criador)
                     <span class="flex items-center gap-1">
                         <span class="material-symbols-outlined text-sm">person</span>
@@ -80,7 +72,6 @@
                 </div>
             </div>
 
-            {{-- Actions --}}
             <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 shrink-0">
                 @if($ciclo->isAtivo())
                 <button
@@ -161,16 +152,6 @@
                         class="w-full px-3.5 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0058be]/30 focus:border-[#0058be] transition-all @error('data_fim') border-[#ba1a1a] @else border-[#c2c6d6] @enderror">
                     @error('data_fim') <p class="text-xs text-[#ba1a1a] mt-1">{{ $message }}</p> @enderror
                 </div>
-            </div>
-
-            <div>
-                <label class="block text-xs font-bold text-[#424754] uppercase tracking-wide mb-1.5">
-                    Prazo para contestação (dias) <span class="text-[#ba1a1a]">*</span>
-                </label>
-                <input wire:model="prazo_contestacao_dias" type="number" min="1" max="90"
-                    class="w-full px-3.5 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0058be]/30 focus:border-[#0058be] transition-all @error('prazo_contestacao_dias') border-[#ba1a1a] @else border-[#c2c6d6] @enderror">
-                @error('prazo_contestacao_dias') <p class="text-xs text-[#ba1a1a] mt-1">{{ $message }}</p> @enderror
-                <p class="text-xs text-[#727785] mt-1">Número de dias após o envio da avaliação em que o servidor pode contestar.</p>
             </div>
         </div>
 

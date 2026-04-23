@@ -10,26 +10,45 @@ use Illuminate\Support\Facades\DB;
 
 class CompetenciaService
 {
-    public function store(array $data, array $itens = [], array $areaIds = []): Competencia
+    /**
+     * @param array<string> $areaIds
+     * @param array<string, int> $niveisEsperados  [area_id => nivel_esperado]
+     */
+    public function store(array $data, array $itens = [], array $areaIds = [], array $niveisEsperados = []): Competencia
     {
-        return DB::transaction(function () use ($data, $itens, $areaIds) {
+        return DB::transaction(function () use ($data, $itens, $areaIds, $niveisEsperados) {
             $competencia = Competencia::create($data);
             $this->syncItens($competencia, $itens);
             if (! empty($areaIds)) {
-                $competencia->areas()->sync($areaIds);
+                $competencia->areas()->sync($this->buildPivot($areaIds, $niveisEsperados));
             }
             return $competencia->load('itens', 'areas');
         });
     }
 
-    public function update(Competencia $competencia, array $data, array $itens = [], array $areaIds = []): Competencia
+    /**
+     * @param array<string> $areaIds
+     * @param array<string, int> $niveisEsperados  [area_id => nivel_esperado]
+     */
+    public function update(Competencia $competencia, array $data, array $itens = [], array $areaIds = [], array $niveisEsperados = []): Competencia
     {
-        return DB::transaction(function () use ($competencia, $data, $itens, $areaIds) {
+        return DB::transaction(function () use ($competencia, $data, $itens, $areaIds, $niveisEsperados) {
             $competencia->update($data);
             $this->syncItens($competencia, $itens);
-            $competencia->areas()->sync($areaIds);
+            $competencia->areas()->sync($this->buildPivot($areaIds, $niveisEsperados));
             return $competencia->fresh()->load('itens', 'areas');
         });
+    }
+
+    /** Monta o array pivot [area_id => ['nivel_esperado' => N]] para sync(). */
+    private function buildPivot(array $areaIds, array $niveisEsperados): array
+    {
+        $pivot = [];
+        foreach ($areaIds as $id) {
+            $nivel = (int) ($niveisEsperados[$id] ?? 3);
+            $pivot[$id] = ['nivel_esperado' => max(1, min(5, $nivel))];
+        }
+        return $pivot;
     }
 
     public function delete(Competencia $competencia): void

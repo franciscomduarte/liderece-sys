@@ -16,7 +16,7 @@ class CompetenciaFactory extends Factory
         return [
             'nome'      => $this->faker->unique()->words(rand(2, 4), true),
             'descricao' => $this->faker->sentence(),
-            'tipo'      => $this->faker->randomElement(['comportamental', 'técnica', 'gerencial']),
+            'tipo'      => $this->faker->randomElement(['organizacional', 'técnica', 'gerencial']),
             'ativo'     => true,
         ];
     }

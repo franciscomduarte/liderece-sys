@@ -7,7 +7,6 @@ namespace App\Services;
 use App\Models\Area;
 use App\Models\Avaliacao;
 use App\Models\Ciclo;
-use App\Models\Contestacao;
 use App\Models\Servidor;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -24,13 +23,10 @@ class RelatorioService
         $qtdEnviadas = $enviadas->count();
 
         return [
-            'total_avaliacoes'       => $total,
-            'enviadas'               => $qtdEnviadas,
-            'media_geral'            => $qtdEnviadas > 0 ? round((float) $enviadas->avg('media'), 1) : 0.0,
-            'contestacoes_pendentes' => Contestacao::where('status', 'pendente')
-                ->whereHas('avaliacao', fn ($q) => $q->where('ciclo_id', $ciclo->id))
-                ->count(),
-            'percentual_concluido'   => $total > 0 ? (int) round(($qtdEnviadas / $total) * 100) : 0,
+            'total_avaliacoes'     => $total,
+            'enviadas'             => $qtdEnviadas,
+            'media_geral'          => $qtdEnviadas > 0 ? round((float) $enviadas->avg('media'), 1) : 0.0,
+            'percentual_concluido' => $total > 0 ? (int) round(($qtdEnviadas / $total) * 100) : 0,
         ];
     }
 
@@ -107,14 +103,11 @@ class RelatorioService
         $qtdEnviadas = $enviadas->count();
 
         return [
-            'total_servidores'       => $servidoresIds->count(),
-            'total_avaliacoes'       => $total,
-            'enviadas'               => $qtdEnviadas,
-            'media_area'             => $qtdEnviadas > 0 ? round((float) $enviadas->avg('media'), 1) : 0.0,
-            'contestacoes_pendentes' => Contestacao::where('status', 'pendente')
-                ->whereHas('avaliacao', fn ($q) => $q->where('ciclo_id', $ciclo->id)->whereIn('servidor_id', $servidoresIds))
-                ->count(),
-            'percentual_concluido'   => $total > 0 ? (int) round(($qtdEnviadas / $total) * 100) : 0,
+            'total_servidores'     => $servidoresIds->count(),
+            'total_avaliacoes'     => $total,
+            'enviadas'             => $qtdEnviadas,
+            'media_area'           => $qtdEnviadas > 0 ? round((float) $enviadas->avg('media'), 1) : 0.0,
+            'percentual_concluido' => $total > 0 ? (int) round(($qtdEnviadas / $total) * 100) : 0,
         ];
     }
 
@@ -137,16 +130,13 @@ class RelatorioService
                 ? round($enviadas->avg('media'), 1)
                 : null;
 
-            $contestacoes = Contestacao::whereIn('avaliacao_id', $avaliacoes->pluck('id'))->count();
-
             return [
-                'id'                  => $servidor->id,
-                'nome'                => $servidor->nome,
-                'cargo'               => $servidor->cargo,
-                'total_avaliacoes'    => $avaliacoes->count(),
-                'enviadas'            => $enviadas->count(),
-                'media_geral'         => $mediaGeral,
-                'contestacoes'        => $contestacoes,
+                'id'               => $servidor->id,
+                'nome'             => $servidor->nome,
+                'cargo'            => $servidor->cargo,
+                'total_avaliacoes' => $avaliacoes->count(),
+                'enviadas'         => $enviadas->count(),
+                'media_geral'      => $mediaGeral,
             ];
         });
     }
@@ -158,15 +148,15 @@ class RelatorioService
         return Avaliacao::where('servidor_id', $servidor->id)
             ->where('tipo', 'area')
             ->where('status', 'enviada')
-            ->with(['ciclo', 'competencia', 'contestacao'])
+            ->with(['ciclo', 'competencia'])
             ->orderByDesc('enviada_at')
             ->get()
             ->groupBy('ciclo_id')
             ->map(function ($avaliacoes) {
                 $ciclo = $avaliacoes->first()->ciclo;
                 return [
-                    'ciclo'      => $ciclo,
-                    'avaliacoes' => $avaliacoes,
+                    'ciclo'       => $ciclo,
+                    'avaliacoes'  => $avaliacoes,
                     'media_ciclo' => round($avaliacoes->avg('media'), 1),
                 ];
             })

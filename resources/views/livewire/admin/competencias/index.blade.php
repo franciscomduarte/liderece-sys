@@ -18,7 +18,7 @@
             </div>
             <select wire:model.live="filtroTipo" class="px-3 py-2.5 bg-white border border-[#c2c6d6] rounded-xl text-sm text-[#424754] focus:outline-none focus:ring-2 focus:ring-[#0058be]/30 focus:border-[#0058be] transition-all shadow-sm">
                 <option value="">Todos os tipos</option>
-                <option value="comportamental">Comportamental</option>
+                <option value="organizacional">Organizacional</option>
                 <option value="técnica">Técnica</option>
                 <option value="gerencial">Gerencial</option>
             </select>
@@ -37,7 +37,7 @@
         @forelse($competencias as $competencia)
         @php
             $tipoBadge = match($competencia->tipo) {
-                'comportamental' => ['bg' => 'bg-[#d8e2ff]', 'text' => 'text-[#004395]', 'icon' => 'psychology'],
+                'organizacional' => ['bg' => 'bg-[#d8e2ff]', 'text' => 'text-[#004395]', 'icon' => 'psychology'],
                 'técnica'        => ['bg' => 'bg-[#6ffbbe]/40', 'text' => 'text-[#002113]', 'icon' => 'engineering'],
                 'gerencial'      => ['bg' => 'bg-[#dee2f7]', 'text' => 'text-[#414657]', 'icon' => 'manage_accounts'],
                 default          => ['bg' => 'bg-[#f0f4f8]', 'text' => 'text-[#424754]', 'icon' => 'workspace_premium'],
@@ -127,7 +127,7 @@
                     <div>
                         <label class="block text-xs font-bold text-[#424754] uppercase tracking-wide mb-1.5">Tipo <span class="text-[#ba1a1a]">*</span></label>
                         <select wire:model="tipo" class="w-full px-3.5 py-2.5 border border-[#c2c6d6] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0058be]/30 focus:border-[#0058be] transition-all">
-                            <option value="comportamental">Comportamental</option>
+                            <option value="organizacional">Organizacional</option>
                             <option value="técnica">Técnica</option>
                             <option value="gerencial">Gerencial</option>
                         </select>
@@ -180,16 +180,35 @@
                 </div>
             </div>
 
-            {{-- Áreas vinculadas --}}
+            {{-- Áreas vinculadas com nível esperado --}}
             @if(count($areas) > 0)
             <div>
-                <label class="block text-xs font-bold text-[#424754] uppercase tracking-wide mb-3">Áreas vinculadas</label>
-                <div class="grid grid-cols-2 gap-2">
+                <label class="block text-xs font-bold text-[#424754] uppercase tracking-wide mb-1">Áreas vinculadas</label>
+                <p class="text-xs text-[#727785] mb-2">Defina o nível de proficiência esperado para cada área.</p>
+                <label class="flex items-center gap-2 cursor-pointer mb-3 px-3 py-2 rounded-xl bg-[#f0f4f8] hover:bg-[#eaeef2] transition-colors w-fit">
+                    <input wire:model="selecionarTodasAreas" wire:change="toggleTodasAreas" type="checkbox" class="w-4 h-4 rounded accent-[#0058be]">
+                    <span class="text-xs font-semibold text-[#424754]">Selecionar todas as áreas</span>
+                </label>
+                <div class="space-y-2 max-h-56 overflow-y-auto pr-1">
                     @foreach($areas as $area)
-                    <label class="flex items-center gap-2 cursor-pointer rounded-xl border border-[#eaeef2] px-3 py-2 hover:bg-[#f0f4f8] transition-colors {{ in_array($area->id, $areaIds) ? 'bg-[#d8e2ff]/30 border-[#0058be]/30' : '' }}">
-                        <input wire:model="areaIds" type="checkbox" value="{{ $area->id }}" class="w-4 h-4 rounded accent-[#0058be]">
-                        <span class="text-sm text-[#424754]">{{ $area->nome }}</span>
-                    </label>
+                    @php $selecionada = in_array($area->id, $areaIds); @endphp
+                    <div class="flex items-center gap-3 rounded-xl border px-3 py-2 transition-colors
+                        {{ $selecionada ? 'bg-[#d8e2ff]/30 border-[#0058be]/30' : 'border-[#eaeef2] hover:bg-[#f0f4f8]' }}">
+                        <label class="flex items-center gap-2 cursor-pointer flex-1 min-w-0">
+                            <input wire:model="areaIds" type="checkbox" value="{{ $area->id }}" class="w-4 h-4 shrink-0 rounded accent-[#0058be]">
+                            <span class="text-sm text-[#424754] truncate">{{ $area->nome }}</span>
+                        </label>
+                        @if($selecionada)
+                        <select wire:model="niveisEsperados.{{ $area->id }}"
+                            class="shrink-0 text-xs px-2 py-1.5 border border-[#c2c6d6] rounded-lg bg-white text-[#424754] focus:outline-none focus:ring-2 focus:ring-[#0058be]/30 focus:border-[#0058be] transition-all">
+                            <option value="1">Nível 1 — Inicial</option>
+                            <option value="2">Nível 2 — Básico</option>
+                            <option value="3">Nível 3 — Proficiente</option>
+                            <option value="4">Nível 4 — Avançado</option>
+                            <option value="5">Nível 5 — Referência</option>
+                        </select>
+                        @endif
+                    </div>
                     @endforeach
                 </div>
             </div>

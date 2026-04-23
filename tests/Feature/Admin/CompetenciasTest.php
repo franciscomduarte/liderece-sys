@@ -22,11 +22,11 @@ it('exibe listagem de competências', function () {
 });
 
 it('filtra por tipo', function () {
-    Competencia::factory()->create(['tipo' => 'comportamental', 'nome' => 'Comp Comp']);
+    Competencia::factory()->create(['tipo' => 'organizacional', 'nome' => 'Comp Comp']);
     Competencia::factory()->create(['tipo' => 'técnica', 'nome' => 'Comp Técnica']);
 
     $test = Livewire::test(Index::class)->set('filtroTipo', 'técnica');
-    expect($test->viewData('competencias')->where('tipo', 'comportamental')->count())->toBe(0);
+    expect($test->viewData('competencias')->where('tipo', 'organizacional')->count())->toBe(0);
 });
 
 it('cria competência com itens', function () {
@@ -67,7 +67,7 @@ it('não exclui competência com avaliações', function () {
 // CompetenciaService unit tests
 it('CompetenciaService::store cria competência com itens e áreas', function () {
     $comp = app(CompetenciaService::class)->store(
-        ['nome' => 'Comunicação', 'tipo' => 'comportamental', 'ativo' => true],
+        ['nome' => 'Comunicação', 'tipo' => 'organizacional', 'ativo' => true],
         [['descricao' => 'Comunica com clareza']],
         [$this->area->id]
     );

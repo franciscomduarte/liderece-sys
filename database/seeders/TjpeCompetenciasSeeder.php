@@ -34,7 +34,7 @@ class TjpeCompetenciasSeeder extends Seeder
             // ── COMPORTAMENTAIS ───────────────────────────────────────────────
 
             [
-                'tipo'     => 'comportamental',
+                'tipo'     => 'organizacional',
                 'nome'     => 'Comunicação',
                 'descricao'=> 'Capacidade de transmitir informações de forma clara, objetiva e adequada ao público, utilizando os canais apropriados.',
                 'itens'    => [
@@ -46,7 +46,7 @@ class TjpeCompetenciasSeeder extends Seeder
                 ],
             ],
             [
-                'tipo'     => 'comportamental',
+                'tipo'     => 'organizacional',
                 'nome'     => 'Trabalho em Equipe',
                 'descricao'=> 'Habilidade de colaborar com colegas, compartilhar conhecimentos e contribuir para o alcance de objetivos coletivos.',
                 'itens'    => [
@@ -58,7 +58,7 @@ class TjpeCompetenciasSeeder extends Seeder
                 ],
             ],
             [
-                'tipo'     => 'comportamental',
+                'tipo'     => 'organizacional',
                 'nome'     => 'Proatividade',
                 'descricao'=> 'Iniciativa para identificar oportunidades de melhoria e agir antes mesmo de ser solicitado.',
                 'itens'    => [
@@ -70,7 +70,7 @@ class TjpeCompetenciasSeeder extends Seeder
                 ],
             ],
             [
-                'tipo'     => 'comportamental',
+                'tipo'     => 'organizacional',
                 'nome'     => 'Comprometimento',
                 'descricao'=> 'Dedicação e responsabilidade no cumprimento das atribuições e prazos estabelecidos.',
                 'itens'    => [
@@ -82,7 +82,7 @@ class TjpeCompetenciasSeeder extends Seeder
                 ],
             ],
             [
-                'tipo'     => 'comportamental',
+                'tipo'     => 'organizacional',
                 'nome'     => 'Ética e Integridade',
                 'descricao'=> 'Atuação pautada em princípios éticos, transparência e respeito às normas institucionais.',
                 'itens'    => [
@@ -94,7 +94,7 @@ class TjpeCompetenciasSeeder extends Seeder
                 ],
             ],
             [
-                'tipo'     => 'comportamental',
+                'tipo'     => 'organizacional',
                 'nome'     => 'Adaptabilidade',
                 'descricao'=> 'Flexibilidade para se ajustar a mudanças, novas demandas e diferentes contextos de trabalho.',
                 'itens'    => [
@@ -106,7 +106,7 @@ class TjpeCompetenciasSeeder extends Seeder
                 ],
             ],
             [
-                'tipo'     => 'comportamental',
+                'tipo'     => 'organizacional',
                 'nome'     => 'Relacionamento Interpessoal',
                 'descricao'=> 'Capacidade de manter relações cordiais, respeitosas e produtivas com colegas, gestores e jurisdicionados.',
                 'itens'    => [
@@ -118,7 +118,7 @@ class TjpeCompetenciasSeeder extends Seeder
                 ],
             ],
             [
-                'tipo'     => 'comportamental',
+                'tipo'     => 'organizacional',
                 'nome'     => 'Resolução de Conflitos',
                 'descricao'=> 'Habilidade para mediar divergências e encontrar soluções equilibradas que atendam aos interesses das partes.',
                 'itens'    => [

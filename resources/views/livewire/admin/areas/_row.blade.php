@@ -67,6 +67,16 @@ $paddingLeft   = 16 + ($depth * 28);
     </td>
 
     <td class="px-6 py-3.5 hidden md:table-cell">
+        @if($area->tipo === 'meio')
+        <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-bold bg-[#dee2f7] text-[#414657]">Meio</span>
+        @elseif($area->tipo === 'finalistica')
+        <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-bold bg-[#6ffbbe]/20 text-[#006947]">Finalística</span>
+        @else
+        <span class="text-xs text-[#c2c6d6]">—</span>
+        @endif
+    </td>
+
+    <td class="px-6 py-3.5 hidden md:table-cell">
         <span class="text-sm text-[#424754]">{{ $area->responsavel ?? '—' }}</span>
     </td>
 

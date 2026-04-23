@@ -3,7 +3,6 @@
 use App\Models\Area;
 use App\Models\Avaliacao;
 use App\Models\Ciclo;
-use App\Models\Contestacao;
 use App\Models\Servidor;
 use App\Services\RelatorioService;
 
@@ -20,19 +19,6 @@ it('resumo geral conta avaliações e calcula percentual', function () {
     expect($resumo['total_avaliacoes'])->toBe(2);
     expect($resumo['enviadas'])->toBe(1);
     expect($resumo['percentual_concluido'])->toBe(50);
-});
-
-it('resumo geral conta contestações pendentes do ciclo', function () {
-    $ciclo = Ciclo::factory()->ativo()->create();
-    $area  = Area::factory()->create();
-    $servidor = Servidor::factory()->create(['area_id' => $area->id]);
-
-    $avaliacao = Avaliacao::factory()->enviada()->create(['ciclo_id' => $ciclo->id, 'servidor_id' => $servidor->id, 'avaliador_id' => $servidor->id, 'tipo' => 'area']);
-    Contestacao::factory()->create(['avaliacao_id' => $avaliacao->id, 'servidor_id' => $servidor->id, 'status' => 'pendente']);
-
-    $resumo = app(RelatorioService::class)->resumoGeral($ciclo);
-
-    expect($resumo['contestacoes_pendentes'])->toBe(1);
 });
 
 it('media por area retorna média correta por área', function () {

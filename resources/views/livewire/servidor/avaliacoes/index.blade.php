@@ -52,11 +52,11 @@
         >
             {{-- Ícone tipo --}}
             <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0
-                @if($competencia->tipo === 'comportamental') bg-[#d8e2ff]
+                @if($competencia->tipo === 'organizacional') bg-[#d8e2ff]
                 @elseif($competencia->tipo === 'técnica') bg-[#6ffbbe]/30
                 @else bg-[#dee2f7] @endif">
                 <span class="material-symbols-outlined text-xl
-                    @if($competencia->tipo === 'comportamental') text-[#004395]
+                    @if($competencia->tipo === 'organizacional') text-[#004395]
                     @elseif($competencia->tipo === 'técnica') text-[#002113]
                     @else text-[#414657] @endif">
                     @if($competencia->tipo === 'gerencial') groups @elseif($competencia->tipo === 'técnica') engineering @else psychology @endif
@@ -68,7 +68,7 @@
                 <div class="flex items-center gap-2 flex-wrap">
                     <h3 class="font-['Manrope'] font-bold text-[#171c1f] text-sm">{{ $competencia->nome }}</h3>
                     <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold
-                        @if($competencia->tipo === 'comportamental') bg-[#d8e2ff] text-[#004395]
+                        @if($competencia->tipo === 'organizacional') bg-[#d8e2ff] text-[#004395]
                         @elseif($competencia->tipo === 'técnica') bg-[#6ffbbe]/40 text-[#002113]
                         @else bg-[#dee2f7] text-[#414657] @endif">
                         {{ ucfirst($competencia->tipo) }}

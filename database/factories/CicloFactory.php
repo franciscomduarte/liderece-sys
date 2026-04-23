@@ -18,12 +18,11 @@ class CicloFactory extends Factory
         $fim    = (clone $inicio)->modify('+6 months');
 
         return [
-            'nome'                   => 'Ciclo ' . $this->faker->year() . '/' . $this->faker->numberBetween(1, 2),
-            'data_inicio'            => $inicio->format('Y-m-d'),
-            'data_fim'               => $fim->format('Y-m-d'),
-            'status'                 => 'inativo',
-            'prazo_contestacao_dias' => 10,
-            'created_by'             => Servidor::factory()->admin(),
+            'nome'        => 'Ciclo ' . $this->faker->year() . '/' . $this->faker->numberBetween(1, 2),
+            'data_inicio' => $inicio->format('Y-m-d'),
+            'data_fim'    => $fim->format('Y-m-d'),
+            'status'      => 'inativo',
+            'created_by'  => Servidor::factory()->admin(),
         ];
     }
 

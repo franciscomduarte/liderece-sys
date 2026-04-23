@@ -18,11 +18,14 @@ class Servidor extends Model
 
     protected $fillable = [
         'user_id', 'matricula', 'nome', 'email', 'cargo',
+        'data_nascimento', 'data_ingresso', 'escolaridade', 'genero', 'raca',
         'area_id', 'perfil', 'status', 'primeiro_acesso',
     ];
 
     protected $casts = [
-        'primeiro_acesso' => 'boolean',
+        'primeiro_acesso'  => 'boolean',
+        'data_nascimento'  => 'date',
+        'data_ingresso'    => 'date',
     ];
 
     public function user(): BelongsTo
@@ -43,11 +46,6 @@ class Servidor extends Model
     public function avaliacoesRealizadas(): HasMany
     {
         return $this->hasMany(Avaliacao::class, 'avaliador_id');
-    }
-
-    public function contestacoes(): HasMany
-    {
-        return $this->hasMany(Contestacao::class, 'servidor_id');
     }
 
     public function notificacoes(): HasMany

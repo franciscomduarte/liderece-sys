@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Services\AvaliacaoService;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Avaliacao extends Model
 {
@@ -52,11 +52,6 @@ class Avaliacao extends Model
         return $this->hasMany(RespostaAvaliacao::class, 'avaliacao_id');
     }
 
-    public function contestacao(): HasOne
-    {
-        return $this->hasOne(Contestacao::class, 'avaliacao_id');
-    }
-
     public function isEnviada(): bool
     {
         return $this->status === 'enviada';
@@ -70,5 +65,13 @@ class Avaliacao extends Model
     public function scopeRascunho($query)
     {
         return $query->where('status', 'rascunho');
+    }
+
+    public function getNivelProficienciaAttribute(): ?int
+    {
+        if ($this->media === null) {
+            return null;
+        }
+        return AvaliacaoService::nivelProficiencia($this->media);
     }
 }

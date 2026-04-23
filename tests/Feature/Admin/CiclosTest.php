@@ -25,7 +25,6 @@ it('cria um novo ciclo como inativo', function () {
         ->set('nome', 'Ciclo 2025/1')
         ->set('data_inicio', '2025-01-01')
         ->set('data_fim', '2025-06-30')
-        ->set('prazo_contestacao_dias', 15)
         ->call('save')
         ->assertDispatched('toast');
 
@@ -40,7 +39,6 @@ it('valida data_fim posterior a data_inicio', function () {
         ->set('nome', 'Ciclo Inválido')
         ->set('data_inicio', '2025-06-01')
         ->set('data_fim', '2025-01-01')
-        ->set('prazo_contestacao_dias', 10)
         ->call('save')
         ->assertHasErrors(['data_fim']);
 });
@@ -80,7 +78,6 @@ it('não pode criar novo ciclo quando já existe ativo', function () {
         ->set('nome', 'Segundo Ciclo')
         ->set('data_inicio', '2025-07-01')
         ->set('data_fim', '2025-12-31')
-        ->set('prazo_contestacao_dias', 10)
         ->call('save')
         ->assertDispatched('toast');
 
@@ -97,7 +94,6 @@ it('exclui ciclo inativo sem avaliações', function () {
     expect(Ciclo::find($ciclo->id))->toBeNull();
 });
 
-// CicloService unit tests
 it('CicloService lança exceção ao ativar com ciclo já ativo', function () {
     Ciclo::factory()->create(['status' => 'ativo', 'created_by' => $this->admin->id]);
     $outro = Ciclo::factory()->create(['status' => 'inativo', 'created_by' => $this->admin->id]);

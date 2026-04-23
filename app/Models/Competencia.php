@@ -34,7 +34,8 @@ class Competencia extends Model
 
     public function areas(): BelongsToMany
     {
-        return $this->belongsToMany(Area::class, 'competencias_areas', 'competencia_id', 'area_id');
+        return $this->belongsToMany(Area::class, 'competencias_areas', 'competencia_id', 'area_id')
+            ->withPivot('nivel_esperado');
     }
 
     public function avaliacoes(): HasMany

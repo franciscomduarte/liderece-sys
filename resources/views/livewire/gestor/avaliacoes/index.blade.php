@@ -86,7 +86,7 @@
                             <div>
                                 <p class="text-sm font-medium text-[#171c1f]">{{ $competencia->nome }}</p>
                                 <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-semibold
-                                    @if($competencia->tipo === 'comportamental') bg-[#d8e2ff] text-[#004395]
+                                    @if($competencia->tipo === 'organizacional') bg-[#d8e2ff] text-[#004395]
                                     @elseif($competencia->tipo === 'técnica') bg-[#6ffbbe]/40 text-[#002113]
                                     @else bg-[#dee2f7] text-[#414657] @endif">
                                     {{ ucfirst($competencia->tipo) }}

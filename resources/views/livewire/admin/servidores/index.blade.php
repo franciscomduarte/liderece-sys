@@ -165,6 +165,52 @@
                     @error('cargo') <p class="text-xs text-[#ba1a1a] mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
+                    <label class="block text-xs font-bold text-[#424754] uppercase tracking-wide mb-1.5">Data de nascimento</label>
+                    <input wire:model="data_nascimento" type="date" class="w-full px-3.5 py-2.5 border border-[#c2c6d6] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0058be]/30 focus:border-[#0058be] transition-all @error('data_nascimento') border-[#ba1a1a] @enderror">
+                    @error('data_nascimento') <p class="text-xs text-[#ba1a1a] mt-1">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-[#424754] uppercase tracking-wide mb-1.5">Data de ingresso no órgão</label>
+                    <input wire:model="data_ingresso" type="date" class="w-full px-3.5 py-2.5 border border-[#c2c6d6] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0058be]/30 focus:border-[#0058be] transition-all @error('data_ingresso') border-[#ba1a1a] @enderror">
+                    @error('data_ingresso') <p class="text-xs text-[#ba1a1a] mt-1">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-[#424754] uppercase tracking-wide mb-1.5">Escolaridade</label>
+                    <select wire:model="escolaridade" class="w-full px-3.5 py-2.5 border border-[#c2c6d6] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0058be]/30 focus:border-[#0058be] transition-all bg-white">
+                        <option value="">Não informado</option>
+                        <option value="fundamental">Ensino Fundamental</option>
+                        <option value="medio">Ensino Médio</option>
+                        <option value="tecnico">Técnico</option>
+                        <option value="superior">Ensino Superior</option>
+                        <option value="especializacao">Especialização</option>
+                        <option value="mestrado">Mestrado</option>
+                        <option value="doutorado">Doutorado</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-[#424754] uppercase tracking-wide mb-1.5">Gênero</label>
+                    <select wire:model="genero" class="w-full px-3.5 py-2.5 border border-[#c2c6d6] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0058be]/30 focus:border-[#0058be] transition-all bg-white">
+                        <option value="">Não informado</option>
+                        <option value="masculino">Masculino</option>
+                        <option value="feminino">Feminino</option>
+                        <option value="nao_binario">Não binário</option>
+                        <option value="outro">Outro</option>
+                        <option value="prefiro_nao_informar">Prefiro não informar</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-[#424754] uppercase tracking-wide mb-1.5">Raça / Cor</label>
+                    <select wire:model="raca" class="w-full px-3.5 py-2.5 border border-[#c2c6d6] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0058be]/30 focus:border-[#0058be] transition-all bg-white">
+                        <option value="">Não informado</option>
+                        <option value="branca">Branca</option>
+                        <option value="preta">Preta</option>
+                        <option value="parda">Parda</option>
+                        <option value="amarela">Amarela</option>
+                        <option value="indigena">Indígena</option>
+                        <option value="prefiro_nao_informar">Prefiro não informar</option>
+                    </select>
+                </div>
+                <div>
                     <label class="block text-xs font-bold text-[#424754] uppercase tracking-wide mb-1.5">Área <span class="text-[#ba1a1a]">*</span></label>
                     <select wire:model="area_id" class="w-full px-3.5 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0058be]/30 focus:border-[#0058be] transition-all @error('area_id') border-[#ba1a1a] @else border-[#c2c6d6] @enderror">
                         <option value="">Selecione a área</option>
