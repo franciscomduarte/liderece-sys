@@ -23,10 +23,11 @@ class RelatorioService
         $qtdEnviadas = $enviadas->count();
 
         return [
-            'total_avaliacoes'     => $total,
-            'enviadas'             => $qtdEnviadas,
-            'media_geral'          => $qtdEnviadas > 0 ? round((float) $enviadas->avg('media'), 1) : 0.0,
-            'percentual_concluido' => $total > 0 ? (int) round(($qtdEnviadas / $total) * 100) : 0,
+            'total_avaliacoes'        => $total,
+            'enviadas'                => $qtdEnviadas,
+            'media_geral'             => $qtdEnviadas > 0 ? round((float) $enviadas->avg('media'), 1) : 0.0,
+            'percentual_concluido'    => $total > 0 ? (int) round(($qtdEnviadas / $total) * 100) : 0,
+            'contestacoes_pendentes'  => 0,
         ];
     }
 

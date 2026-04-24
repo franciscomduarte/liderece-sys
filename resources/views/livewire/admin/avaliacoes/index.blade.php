@@ -45,10 +45,10 @@
 
     {{-- Filtros --}}
     <div class="float-in bg-white rounded-2xl shadow-[0_12px_40px_rgba(23,28,31,0.06)] ring-1 ring-black/[0.04] px-5 py-4" style="animation-delay:250ms">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+        <div class="flex flex-wrap gap-3">
 
             {{-- Busca --}}
-            <div class="lg:col-span-2 relative">
+            <div class="relative grow basis-52 min-w-[180px]">
                 <span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#727785] text-lg pointer-events-none">search</span>
                 <input type="text" wire:model.live.debounce.300ms="filtroBusca"
                     placeholder="Buscar servidor..."
@@ -57,7 +57,7 @@
 
             {{-- Ciclo --}}
             <select wire:model.live="filtroCiclo"
-                class="px-3.5 py-2.5 border border-[#c2c6d6] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0058be]/30 focus:border-[#0058be] bg-[#f6fafe]">
+                class="grow basis-36 min-w-[130px] px-3.5 py-2.5 border border-[#c2c6d6] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0058be]/30 focus:border-[#0058be] bg-[#f6fafe]">
                 <option value="">Todos os ciclos</option>
                 @foreach($ciclos as $ciclo)
                 <option value="{{ $ciclo->id }}">{{ $ciclo->nome }}</option>
@@ -66,28 +66,28 @@
 
             {{-- Área --}}
             <select wire:model.live="filtroArea"
-                class="px-3.5 py-2.5 border border-[#c2c6d6] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0058be]/30 focus:border-[#0058be] bg-[#f6fafe]">
+                class="grow basis-36 min-w-[130px] px-3.5 py-2.5 border border-[#c2c6d6] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0058be]/30 focus:border-[#0058be] bg-[#f6fafe]">
                 <option value="">Todas as áreas</option>
                 @foreach($areas as $area)
                 <option value="{{ $area->id }}">{{ $area->nome }}</option>
                 @endforeach
             </select>
 
-            {{-- Tipo e Status --}}
-            <div class="flex gap-2">
-                <select wire:model.live="filtroTipo"
-                    class="flex-1 px-3 py-2.5 border border-[#c2c6d6] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0058be]/30 focus:border-[#0058be] bg-[#f6fafe]">
-                    <option value="">Todos tipos</option>
-                    <option value="autoavaliacao">Autoavaliação</option>
-                    <option value="area">Área</option>
-                </select>
-                <select wire:model.live="filtroStatus"
-                    class="flex-1 px-3 py-2.5 border border-[#c2c6d6] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0058be]/30 focus:border-[#0058be] bg-[#f6fafe]">
-                    <option value="">Todos status</option>
-                    <option value="rascunho">Rascunho</option>
-                    <option value="enviada">Enviada</option>
-                </select>
-            </div>
+            {{-- Tipo --}}
+            <select wire:model.live="filtroTipo"
+                class="grow basis-32 min-w-[110px] px-3 py-2.5 border border-[#c2c6d6] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0058be]/30 focus:border-[#0058be] bg-[#f6fafe]">
+                <option value="">Todos tipos</option>
+                <option value="autoavaliacao">Autoavaliação</option>
+                <option value="area">Área</option>
+            </select>
+
+            {{-- Status --}}
+            <select wire:model.live="filtroStatus"
+                class="grow basis-32 min-w-[110px] px-3 py-2.5 border border-[#c2c6d6] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0058be]/30 focus:border-[#0058be] bg-[#f6fafe]">
+                <option value="">Todos status</option>
+                <option value="rascunho">Rascunho</option>
+                <option value="enviada">Enviada</option>
+            </select>
 
         </div>
     </div>
